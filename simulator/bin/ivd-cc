@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+import argparse
+from src.assembler import Assembler
+from src.instruction import Mode
+from src.compiler import compile_matrix_vector_multiplication, generate_accelerator_and_instruction_configuration
+import os
+import sys
+import numpy as np
+from bitstring import Bits
+
+def main():
+    
+    # Loading the Input Arguments
+    args = parse_args()
+
+    # Creating the Assembler
+    accel_config, _ = generate_accelerator_and_instruction_configuration(
+        processing_element_count=args.pe_count,
+        processing_element_input_bitwidth=args.pe_input_bitwidth,
+        processing_element_accumulation_bitwidth=args.pe_accumulation_bitwidth,
+        processing_element_output_bitwidth=args.pe_output_bitwidth,
+        controller_counter_bitwidth=args.controller_counter_bitwidth
+    )
+
+    # Loading the input files
+    matrix    = load_npy(args.matrix_npy)
+    vector    = load_npy(args.vector_npy)
+    precision = convert_precision(args.precision)
+
+    mem0, mem1, instructions, _ = compile_matrix_vector_multiplication(
+        matrix, vector, accel_config, precision
+    )
+
+    # Saving the Collateral
+    save_bits(mem0, args.out_mem0)
+    save_bits(mem1, args.out_mem1)
+    save_instructions(instructions, args.out_asm)
+
+
+def save_bits(bit_list : list[Bits], output_filename : str) -> None:
+    with open(output_filename, 'w') as file:
+        for elem in bit_list:
+            file.write(str(elem.bin))
+            file.write('\n')
+   
+
+def save_instructions(inst_list : list[str], output_filename : str) -> None:
+    with open(output_filename, 'w') as file:
+        for elem in inst_list:
+            file.write(elem)
+            file.write('\n')
+
+
+def load_npy(filename : str) -> np.ndarray:
+    if not os.path.isfile(filename):
+        print(f"ERROR: Matrix File \"{filename}\" Not Found.", file=sys.stderr)
+        sys.exit(1)
+    return np.load(filename)
+
+def convert_precision(precision : str) -> int:
+    result = Mode.STR_TO_BITWIDTH_DICT.get(precision.upper(),None)[0]
+    if result is None:
+        print(f"ERROR: Precision \"{precision}\" Not Recognized.", file=sys.stderr)
+        sys.exit(1)
+    return result
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog='ivd-cc',
+        description='This program assembles a source assembly file for the EE271 SIMD Accelerator.',
+    )
+    parser.add_argument(
+        'matrix_npy',
+        help="The matrix values file to be multiplied.",
+        type=str
+    )
+    parser.add_argument(
+        'vector_npy',
+        help="The vector values file to be multiplied.",
+        type=str
+    )
+    parser.add_argument(
+        'precision',
+        help="The precision which should be used within the multiplication.",
+        type=str
+    )
+    parser.add_argument(
+        '--out_asm',
+        help="The name of the output assembly file.",
+        type=str,
+        default="out.asm"
+    )
+    parser.add_argument(
+        '--out_mem0',
+        help="The name of the mem0 values file.",
+        type=str,
+        default="out_mem0.bits"
+    )
+    parser.add_argument(
+        '--out_mem1',
+        help="The name of the mem1 values file.",
+        type=str,
+        default="out_mem1.bits"
+    )
+    parser.add_argument(
+        '--pe_count',
+        help="The number of PEs in the design.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--pe_input_bitwidth',
+        help="The PE input bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_output_bitwidth',
+        help="The PE output bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_accumulation_bitwidth',
+        help="The PE accumulation bitwidth.",
+        type=int,
+        default=64
+    )
+    parser.add_argument(
+        '--controller_counter_bitwidth',
+        help="The controller counter bitwidth.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--controller_imem_depth',
+        help="The controller imem depth.",
+        type=int,
+        default=128
+    )
+
+    return parser.parse_args()
+
+
+if __name__=="__main__":
+    main()

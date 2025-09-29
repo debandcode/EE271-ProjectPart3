@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+from src.compiler import generate_accelerator_and_instruction_configuration
+from src.instruction import Instruction
+from src.accelerator import Accelerator
+from bitstring import Bits
+import argparse
+import os
+import sys
+
+def main():
+
+    # Parsing input arguments
+    args = parse_args()
+
+    # Creating the Accelerator
+    accel_config, inst_config = generate_accelerator_and_instruction_configuration(
+        processing_element_count=args.pe_count,
+        processing_element_input_bitwidth=args.pe_input_bitwidth,
+        processing_element_accumulation_bitwidth=args.pe_accumulation_bitwidth,
+        processing_element_output_bitwidth=args.pe_output_bitwidth,
+        controller_counter_bitwidth=args.controller_counter_bitwidth
+    )
+
+    # Loading the inputs
+    inst_bits = load_bit_list(args.instruction_bits)
+    mem0_bits = load_bit_list(args.mem0_bits)
+    mem1_bits = load_bit_list(args.mem1_bits)
+
+    # Configuring the Accelerator
+    accelerator = Accelerator(accel_config)
+    accelerator.set_memory(mem0_bits, mem1_bits)
+
+    # Converting Inst Bits to Instructions
+    for elem in inst_bits:
+        if elem.uint == 0:
+            break
+        tmp_inst = Instruction(inst_config)
+        tmp_inst.set_instruction(elem)
+        accelerator.execute_instruction(tmp_inst)
+
+    # Dumping Memory
+    with open(args.out, "w") as file:
+        for elem in accelerator.get_mem2():
+            file.write(f"{elem.bin}\n")
+
+
+def load_bit_list(file_name : str) -> list[Bits]:
+    if not os.path.exists(file_name):
+        print(f"ERROR: File {file_name}",file=sys.stderr)
+        sys.exit(1)
+    else:
+        with open(file_name,"r") as file:
+            lines = file.readlines()
+            bit_list = [None] * len(lines)
+            for i, line in enumerate(lines):
+                bit_list[i] = Bits(bin=line,length=len(line))
+    return bit_list
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog='ivd-sim',
+        description='This program simulates the accelerator using the python simulator on an input program and memory configuration.',
+    )
+
+    parser.add_argument(
+        '--instruction_bits',
+        help="The instruction bits file name.",
+        type=str,
+        required=True
+    )
+    parser.add_argument(
+        '--mem0_bits',
+        help="The mem0 bits file name.",
+        type=str,
+        required=True
+    )
+    parser.add_argument(
+        '--mem1_bits',
+        help="The mem1 bits file name.",
+        type=str,
+        required=True
+    )
+    parser.add_argument(
+        '--out',
+        help="The output file name.",
+        type=str,
+        default="out.bits"
+    )
+
+    parser.add_argument(
+        '--pe_count',
+        help="The number of PEs in the design.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--pe_input_bitwidth',
+        help="The PE input bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_output_bitwidth',
+        help="The PE output bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_accumulation_bitwidth',
+        help="The PE accumulation bitwidth.",
+        type=int,
+        default=64
+    )
+    parser.add_argument(
+        '--controller_counter_bitwidth',
+        help="The controller counter bitwidth.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--controller_imem_depth',
+        help="The controller imem depth.",
+        type=int,
+        default=128
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+from src.compiler import generate_accelerator_and_instruction_configuration
+from src.assembler import Assembler
+from src.instruction import MI, PEI, Mode
+import argparse
+import numpy as np
+
+def main():
+
+    # Parsing input arguments
+    args = parse_args()
+
+    # Creating the Accelerator
+    accel_config, inst_config = generate_accelerator_and_instruction_configuration(
+        processing_element_count=args.pe_count,
+        processing_element_input_bitwidth=args.pe_input_bitwidth,
+        processing_element_accumulation_bitwidth=args.pe_accumulation_bitwidth,
+        processing_element_output_bitwidth=args.pe_output_bitwidth,
+        controller_counter_bitwidth=args.controller_counter_bitwidth
+    )
+
+    # Configuring the instruction mappings
+    buffer_instruction_mapping = ""
+    for elem in MI.STR_TO_OPCODE_DICT.keys():
+        buffer_instruction_mapping = buffer_instruction_mapping + f"`define BUF_{elem} {MI.STR_TO_OPCODE_DICT[elem][0]}\n"
+    pe_instruction_mapping = ""
+    for elem in PEI.STR_TO_OPCODE_DICT.keys():
+        pe_instruction_mapping = pe_instruction_mapping + f"`define PE_{elem}_OPCODE {inst_config.PE_INST_CONFIG.OPCODE_BITWIDTH}'d{PEI.STR_TO_OPCODE_DICT[elem][0]}\n"
+        if len(PEI.STR_TO_OPCODE_DICT[elem]) == 2:
+            pe_instruction_mapping = pe_instruction_mapping + f"`define PE_{elem}_VALUE {inst_config.PE_INST_CONFIG.VALUE_BITWIDTH}'d{PEI.STR_TO_OPCODE_DICT[elem][1]}\n"
+
+    # Configuring the mode mappings
+    mode_mappings = ""
+    for elem in Mode.STR_TO_BITWIDTH_DICT.keys():
+        mode_mappings = mode_mappings + f"`define MODE_{elem} {inst_config.PE_INST_CONFIG.MODE_BITWIDTH}'d{Mode.opcode(Mode.STR_TO_BITWIDTH_DICT[elem][0])}\n"
+
+    # Creating Verilog Defines
+    defines=f'''`ifndef ACCEL_DEFINES_H
+`define ACCEL_DEFINES_H
+
+//Top Level Parameters
+`define PE_COUNT {accel_config.PE_COUNT}
+`define CONTROLLER_COUNTER_BITWIDTH {accel_config.COUNTER_BITWIDTH}
+
+// Buffer Parameters
+`define MEM0_BITWIDTH   {accel_config.BUFFER_CONFIG.MEM0_BITWIDTH}
+`define MEM0_DEPTH      {accel_config.BUFFER_CONFIG.MEM0_DEPTH}
+`define MEM0_ADDR_WIDTH {int(np.ceil(np.log2(accel_config.BUFFER_CONFIG.MEM0_DEPTH)))}
+`define MEM1_BITWIDTH   {accel_config.BUFFER_CONFIG.MEM1_BITWIDTH}
+`define MEM1_DEPTH      {accel_config.BUFFER_CONFIG.MEM1_DEPTH}
+`define MEM1_ADDR_WIDTH {int(np.ceil(np.log2(accel_config.BUFFER_CONFIG.MEM1_DEPTH)))}
+`define MEM2_BITWIDTH   {accel_config.BUFFER_CONFIG.MEM2_BITWIDTH}
+`define MEM2_DEPTH      {accel_config.BUFFER_CONFIG.MEM2_DEPTH}
+`define MEM2_ADDR_WIDTH {int(np.ceil(np.log2(accel_config.BUFFER_CONFIG.MEM2_DEPTH)))}
+
+// Mode Parameters
+{mode_mappings}
+//Processing Element Parameters
+`define PE_INPUT_BITWIDTH        {accel_config.PE_CONFIG.INPUT_BITWIDTH}
+`define PE_ACCUMULATION_BITWIDTH {accel_config.PE_CONFIG.ACCUMULATION_BITWIDTH}
+`define PE_OUTPUT_BITWIDTH       {accel_config.PE_CONFIG.OUTPUT_BITWIDTH}
+
+// PE Instruction Parameters
+`define PE_OPCODE_BITWIDTH  {inst_config.PE_INST_CONFIG.OPCODE_BITWIDTH}
+`define PE_MODE_BITWIDTH    {inst_config.PE_INST_CONFIG.MODE_BITWIDTH}
+`define PE_VALUE_BITWIDTH   {inst_config.PE_INST_CONFIG.VALUE_BITWIDTH}
+{pe_instruction_mapping}
+
+// Buffer Instruction Parameters
+`define BUF_OPCODE_BITWIDTH      {inst_config.MEMORY_INST_CONFIG.OPCODE_BITWIDTH}
+`define BUF_MODE_BITWIDTH        {inst_config.MEMORY_INST_CONFIG.MODE_BITWIDTH}
+`define BUF_MEMA_OFFSET_BITWIDTH {inst_config.MEMORY_INST_CONFIG.MEMA_OFFSET_BITWIDTH}
+`define BUF_MEMB_OFFSET_BITWIDTH {inst_config.MEMORY_INST_CONFIG.MEMB_OFFSET_BITWIDTH}
+{buffer_instruction_mapping}
+
+// Controller Instruction Parameters
+`define CONTROLLER_COUNT_BITWIDTH    {inst_config.COUNT_BITWIDTH}
+`define CONTROLLER_MEMA_INC_BITWIDTH {inst_config.MEMA_INC_BITWIDTH}
+`define CONTROLLER_MEMB_INC_BITWIDTH {inst_config.MEMB_INC_BITWIDTH}
+`define FULL_INSTRUCTION_BITWIDTH    {inst_config.get_width() + inst_config.PE_INST_CONFIG.get_width() + inst_config.MEMORY_INST_CONFIG.get_width()}
+`define IMEM_DEPTH                   {args.controller_imem_depth}
+`define IMEM_ADDR_WIDTH              {int(np.ceil(np.log2(args.controller_imem_depth)))}
+
+// Helpful Structs for Packing Instructions
+typedef struct packed {{
+    logic [`PE_OPCODE_BITWIDTH-1:0] opcode;
+    logic [`PE_MODE_BITWIDTH-1:0]   mode;
+    logic [`PE_VALUE_BITWIDTH-1:0]  value;
+}} pe_inst_t;
+
+typedef struct packed {{
+    logic [`BUF_OPCODE_BITWIDTH-1:0]      opcode;
+    logic [`BUF_MODE_BITWIDTH-1:0]        mode;
+    logic [`BUF_MEMA_OFFSET_BITWIDTH-1:0] mema_offset;
+    logic [`BUF_MEMB_OFFSET_BITWIDTH-1:0] memb_offset;
+}} buf_inst_t;
+
+typedef struct packed {{
+    buf_inst_t buf_instruction;
+    pe_inst_t  pe_instruction;
+    logic       [`CONTROLLER_COUNT_BITWIDTH-1:0]    count;
+    logic       [`CONTROLLER_MEMA_INC_BITWIDTH-1:0] mema_inc;
+    logic       [`CONTROLLER_MEMB_INC_BITWIDTH-1:0] memb_inc;
+}} instruction_t;
+
+{generate_vector_decode_module(accel_config, inst_config)}
+
+`endif
+'''
+
+    # Saving as .sv file
+    with open(args.out,'w') as file:
+        file.write(defines)
+
+
+def generate_vector_decode_module(accel_config, inst_config) -> str:
+
+    # Computing useful values
+    mem1_addr_width        = int(np.ceil(np.log2(accel_config.BUFFER_CONFIG.MEM1_DEPTH)))
+    cnt_bitwidth           = accel_config.COUNTER_BITWIDTH
+    default_address_offset = cnt_bitwidth - mem1_addr_width
+
+    mode_string_list = []
+    for elem in Mode.STR_TO_BITWIDTH_DICT.keys():
+
+        # Determining the Number of Address Bits Required for the Given Mode
+        num_sub_vectors  = int(accel_config.PE_CONFIG.INPUT_BITWIDTH/Mode.STR_TO_BITWIDTH_DICT[elem][0])
+        vector_addr_bits = int(np.ceil(np.log2(num_sub_vectors)))
+
+        # If the number of required address bits is zero, just pass the whole vector to the output
+        mode_string = (" " * 12) + f"""`MODE_{elem}: begin
+                addr_to_mem = addr_from_controller[`BUF_MEMB_OFFSET_BITWIDTH-{default_address_offset - vector_addr_bits + 1}:{vector_addr_bits}];
+"""
+
+        # Handling Each Case
+        if vector_addr_bits != 0:
+            mode_string = mode_string + (" " * 16) + f"case (addr_from_controller_reg[{vector_addr_bits-1}:0])\n"
+            for val in range(num_sub_vectors):
+                mode_string = mode_string + (" " * 20) + f"{vector_addr_bits}'d{val}: data_to_pe = {{{num_sub_vectors}{{data_from_mem[{((val+1) * Mode.STR_TO_BITWIDTH_DICT[elem][0]) - 1}:{val * Mode.STR_TO_BITWIDTH_DICT[elem][0]}]}}}};\n"
+            mode_string = mode_string + (" " * 16) + "endcase\n"
+        else:
+            mode_string = mode_string + (" " * 16) + "data_to_pe = data_from_mem;\n"
+        mode_string = mode_string + (" " * 12) + "end"
+
+        # Appending to List
+        mode_string_list = mode_string_list + [mode_string]
+
+    vector_decoder_string = f"""
+module vector_decoder (
+    input  logic [`MEM1_BITWIDTH-1:0]            data_from_mem,
+    input  logic [`BUF_MEMB_OFFSET_BITWIDTH-1:0] addr_from_controller,
+    input  logic [`BUF_MEMB_OFFSET_BITWIDTH-1:0] addr_from_controller_reg,
+    input  logic [`BUF_MODE_BITWIDTH-1:0]        mode,
+    output logic [`MEM1_BITWIDTH-1:0]            data_to_pe,
+    output logic [`MEM1_ADDR_WIDTH-1:0]          addr_to_mem
+);
+    always_comb begin
+        case (mode)
+{"\n".join(mode_string_list)}
+        endcase
+    end
+endmodule
+"""
+    return vector_decoder_string
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog='ivd-gv',
+        description='This program generates the SystemVerilog defines file for the EE271 SIMD Accelerator.',
+    )
+    parser.add_argument(
+        '--out',
+        help="The output filename for the defines file.",
+        type=str,
+        default="out.sv"
+    )
+    parser.add_argument(
+        '--pe_count',
+        help="The number of PEs in the design.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--pe_input_bitwidth',
+        help="The PE input bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_output_bitwidth',
+        help="The PE output bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_accumulation_bitwidth',
+        help="The PE accumulation bitwidth.",
+        type=int,
+        default=64
+    )
+    parser.add_argument(
+        '--controller_counter_bitwidth',
+        help="The controller counter bitwidth.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--controller_imem_depth',
+        help="The controller imem depth.",
+        type=int,
+        default=128
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    main()

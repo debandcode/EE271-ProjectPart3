@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+import argparse
+from src.assembler import Assembler
+from src.compiler import generate_accelerator_and_instruction_configuration
+from src.instruction import Instruction
+import os
+import sys
+from bitstring import Bits
+
+def main():
+    
+    # Loading the Input Arguments
+    args = parse_args()
+
+    # Creating the Assembler
+    _, inst_config = generate_accelerator_and_instruction_configuration(
+        processing_element_count=args.pe_count,
+        processing_element_input_bitwidth=args.pe_input_bitwidth,
+        processing_element_accumulation_bitwidth=args.pe_accumulation_bitwidth,
+        processing_element_output_bitwidth=args.pe_output_bitwidth,
+        controller_counter_bitwidth=args.controller_counter_bitwidth
+    )
+    assembler = Assembler(inst_config)
+
+    # Loading the input file
+    if not os.path.isfile(args.source_file):
+        print(f"ERROR: Source File \"{args.source_file}\" Not Found.", file=sys.stderr)
+        sys.exit(1)
+    with open(args.source_file, 'r') as file:
+        instructions = file.readlines()
+    instructions = [inst.strip() for inst in instructions]
+
+    # Assembling
+    binary_instructions = assembler.assemble_instructions(instructions)
+    binary_instructions = pad_instructions(binary_instructions, args.controller_imem_depth)
+    with open(args.out, 'w') as file:
+        for elem in binary_instructions:
+            file.write(elem)
+            file.write('\n')
+
+def pad_instructions(insts : list[Instruction], pad :int) -> list[str]:
+    instruction_binary = [None] * pad
+    for i in range(pad):
+        if i < len(insts):
+            instruction_binary[i] = str(insts[i].get_instruction().bin)
+        else:
+            instruction_binary[i] = "0" * insts[0].get_instruction().length
+    return instruction_binary
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog='ivd-as',
+        description='This program assembles a source assembly file for the EE271 SIMD Accelerator.',
+    )
+    parser.add_argument(
+        'source_file',
+        help="The source file to be assembled.",
+        type=str
+    )
+    parser.add_argument(
+        '--out',
+        help="The output binary of the assembled source file.",
+        type=str,
+        default="out.bits"
+    )
+    parser.add_argument(
+        '--pe_count',
+        help="The number of PEs in the design.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--pe_input_bitwidth',
+        help="The PE input bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_output_bitwidth',
+        help="The PE output bitwidth.",
+        type=int,
+        default=32
+    )
+    parser.add_argument(
+        '--pe_accumulation_bitwidth',
+        help="The PE accumulation bitwidth.",
+        type=int,
+        default=64
+    )
+    parser.add_argument(
+        '--controller_counter_bitwidth',
+        help="The controller counter bitwidth.",
+        type=int,
+        default=16
+    )
+    parser.add_argument(
+        '--controller_imem_depth',
+        help="The controller imem depth.",
+        type=int,
+        default=128
+    )
+
+    return parser.parse_args()
+
+
+if __name__=="__main__":
+    main()

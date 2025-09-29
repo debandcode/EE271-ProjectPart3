@@ -1,0 +1,9 @@
+csrc
+DVEfiles
+simv.daidir
+software
+defines.sv
+simv
+ucli.key
+*.vpd
+*.vcd

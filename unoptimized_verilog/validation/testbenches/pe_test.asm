@@ -1,0 +1,2 @@
+NOP | MAC INT8 | 1 0 0
+NOP | OUT INT8 | 1 0 0

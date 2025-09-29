@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+import argparse
+import os
+import sys
+import numpy as np
+
+def main():
+
+    # Loading the Input Arguments
+    args = parse_args()
+
+    # Generating the matrix
+    np.random.seed(args.seed)
+    matrix = np.random.randint(args.min, args.max, size=(args.rows,args.cols))
+
+    # Saving the Matrix
+    np.save(args.out,matrix)
+
+    # Displaying if requested
+    if args.display:
+        print(matrix)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog='ivd-mg',
+        description='This program generates a matrix file that is compatible with the ivd-cc compiler.',
+    )
+    parser.add_argument(
+        'rows',
+        help="The number of rows in the randomly generated matrix.",
+        type=int
+    )
+    parser.add_argument(
+        'cols',
+        help="The number of cols in the randomly generated matrix.",
+        type=int
+    )
+    parser.add_argument(
+        'min',
+        help="The minimum value for the randomly generated matrix.",
+        type=int
+    )
+    parser.add_argument(
+        'max',
+        help="The maximum value for the randomly generated matrix.",
+        type=int
+    )
+    parser.add_argument(
+        '--out',
+        help="The output filename.",
+        type=str,
+        default="out.npy"
+    )
+    parser.add_argument(
+        '--seed',
+        help='The seed for randomly generating the matrix.',
+        type=int,
+        default=0
+    )
+    parser.add_argument(
+        '--display',
+        help="Determines whether the matrix is printed out.",
+        action="store_true"
+    )
+
+    return parser.parse_args()
+
+
+if __name__=="__main__":
+    main()
