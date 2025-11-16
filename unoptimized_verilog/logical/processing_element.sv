@@ -41,8 +41,7 @@ module processing_element(
 		    case (pe_inst.opcode)
 			    `PE_MAC_OPCODE: begin
 				    case (pe_inst.value)
-
-					    //MAC
+					    // MAC
 					    `PE_MAC_VALUE: begin
 						    case (pe_inst.mode)
 							    `MODE_INT8: begin
@@ -65,18 +64,18 @@ module processing_element(
 
 							    `MODE_INT16: begin
 								    for (int i=0; i< `PE_INPUT_BITWIDTH/16; i++) begin
-                                                                            logic signed [15:0] a_s;
-                                                                            logic signed [15:0] b_s;
-                                                                            logic signed [31:0] acc_s;
-                                                                            logic signed [31:0] mul_s;
-                                                                            logic signed [31:0] res_s;
-
-                                                                            a_s = vector_input[16*i +: 16];
-                                                                            b_s = matrix_input[16*i +: 16];
-                                                                            acc_s = acc_reg[32*i +: 32];
-                                                                            mul_s = a_s*b_s;
-                                                                            res_s = mul_s + acc_s;
-
+									    logic signed [15:0] a_s;
+									    logic signed [15:0] b_s;
+									    logic signed [31:0] acc_s;
+									    logic signed [31:0] mul_s;
+									    logic signed [31:0] res_s;
+									    
+									    a_s = vector_input[16*i +: 16];
+									    b_s = matrix_input[16*i +: 16];
+									    acc_s = acc_reg[32*i +: 32];
+									    mul_s = a_s*b_s;
+									    res_s = mul_s + acc_s;
+									    
 									    acc_next[32*i +:32] = res_s;
 								    end
 							    end
