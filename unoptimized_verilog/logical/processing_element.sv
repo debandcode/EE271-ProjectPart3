@@ -139,7 +139,7 @@ module processing_element(
 										logic signed [15:0] acc_s;
 
 										a_s = vector_input[8*i +: 8];
-										acc_s = {{8{a_s[7]}}, a_s};
+										acc_s = {{8{a_s[7]}}, a_s}; // make it signed
 
 										acc_next[16*i +: 16] = acc_s;
 									end
@@ -151,7 +151,7 @@ module processing_element(
 									logic signed [31:0] acc_s;
 
 									a_s = vector_input[16*i +: 16];
-									acc_s = {{16{a_s[15]}}, a_s};
+									acc_s = {{16{a_s[15]}}, a_s}; // make it signed
 
 									acc_next[32*i +: 32] = acc_s;
 									end
@@ -162,7 +162,7 @@ module processing_element(
 									logic signed [63:0] acc_s;
 
 									a_s = vector_input;
-									acc_s = {{32{a_s[31]}}, a_s};
+									acc_s = {{32{a_s[31]}}, a_s}; // make it signed
 
 									acc_next = acc_s;
 								end
