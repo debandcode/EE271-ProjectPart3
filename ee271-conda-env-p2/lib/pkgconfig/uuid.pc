@@ -1,0 +1,11 @@
+prefix=/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/ee271-conda-env-p2
+exec_prefix=/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/ee271-conda-env-p2
+libdir=/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/ee271-conda-env-p2/lib
+includedir=/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/ee271-conda-env-p2/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.41.2
+Cflags: -I${includedir}/uuid
+Libs.private:  -lpthread
+Libs: -L${libdir} -luuid
