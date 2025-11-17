@@ -35,6 +35,13 @@ module buffer (
     logic [`MEM0_ADDR_WIDTH-1:0] mem0_addr;
     logic [`MEM1_ADDR_WIDTH-1:0] mem1_addr;
     logic [`MEM2_ADDR_WIDTH-1:0] mem2_addr;
+    
+    // set mem0 and mem2
+    always_comb begin
+	    mem0_addr = buf_inst.mema_offset[`MEM0_ADDR_WIDTH-1:0];
+	    mem2_addr = buf_inst.mema_offset[`MEM2_ADDR_WIDTH-1:0];
+    end
+
     // set mem1
     always_comb begin
         mem1_addr = '0;
