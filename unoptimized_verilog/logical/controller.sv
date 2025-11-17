@@ -64,7 +64,6 @@ module controller(
             inst_exec_begins_r <= 1'b0;
 
             case (state)
-
                 IDLE: begin
                     if (inst_valid) begin
                         buf_inst_r <= inst.buf_instruction;
@@ -72,7 +71,6 @@ module controller(
                         count_r <= inst.count;
                         mema_inc_r <= inst.mema_inc;
                         memb_inc_r <= inst.memb_inc;
-                        
                         iter_count_r <= '0;
                         
                         state <= EXECUTING;
@@ -96,7 +94,8 @@ module controller(
                     end
                 end
 
-                default: state <= IDLE;
+                default:
+			state <= IDLE;
 
             endcase
         end
