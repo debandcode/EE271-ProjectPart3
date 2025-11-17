@@ -35,7 +35,7 @@ module processing_element(
     // Combinational next state logic 
     always_comb begin
 	    acc_next = acc_reg;
-	    out_next = acc_next;
+	    out_next = out_reg;
 
   	    if (pe_inst_valid) begin
 		    case (pe_inst.opcode)
