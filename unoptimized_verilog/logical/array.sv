@@ -8,16 +8,15 @@ parameter INITIALIZE_MEMORY=0  // Do not initialize memory by default.
 input logic clk,            // clock
 input logic cen,            // enable active low
 input logic [DW-1:0] wen,            // write active low (read high)
-input logic gwen,	    //global write enable active low
+input logic gwen,     //global write enable active low
 input logic [AW-1:0] a,              // address
 input logic [DW-1:0] d,              // write data
 output logic [DW-1:0] q               // read data
 );
 
-
 logic     [DW-1:0]  data [0:NW-1];        // RAM data
 logic     [DW-1:0]  read_data;
-//logic	  [DW-1:0]  writeEnable;
+//logic   [DW-1:0]  writeEnable;
 integer             i;                       // Loop counter
 
 // optionally initialize RAM, as done in non-generic models
@@ -36,7 +35,7 @@ always @(posedge clk)
 begin
   if (~cen & ~gwen)
   begin
-    data[a[AW-1:0]] = (data[a[AW-1:0]] & wen) | (~wen & (wen | d));
+    data[a[AW-1:0]] = (data[a[AW-1:0]] & wen) | (~wen & (wen | d));  // when wen==1(read), wen='1 (bitwidth matching data[])
   end
 end
 
