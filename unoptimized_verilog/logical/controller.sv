@@ -24,7 +24,7 @@ module controller(
 
     // START IMPLEMENTATION
     // reg/latched version of instructions and counts
-    pe_inst_t  pe_inst_r;
+    pe_inst_t pe_inst_r;
     buf_inst_t buf_inst_r;
 
     logic [`CONTROLLER_COUNT_BITWIDTH-1:0] count_r; // inst.count
