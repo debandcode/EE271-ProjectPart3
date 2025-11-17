@@ -94,8 +94,7 @@ module controller(
                     end
                 end
 
-                default:
-			state <= IDLE;
+                default: state <= IDLE;
 
             endcase
         end
