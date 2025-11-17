@@ -20,29 +20,29 @@ module controller(
 );
 
     typedef enum {IDLE, EXECUTING} fsm_t; 
-    fsm_t state; // Current state register (updated in always_ff)
+    fsm_t state; // current state register, updated in always_ff
 
     // START IMPLEMENTATION
-    // Latched/Reg versions of instructions and counts
+    // reg/latched version of instructions and counts
     pe_inst_t  pe_inst_r;
     buf_inst_t buf_inst_r;
 
-    logic [`CONTROLLER_COUNT_BITWIDTH-1:0]    count_r;        // inst.count
-    logic [`CONTROLLER_COUNT_BITWIDTH-1:0]    iter_count_r;   // count current iteration, 0 to count_r
+    logic [`CONTROLLER_COUNT_BITWIDTH-1:0] count_r; // inst.count
+    logic [`CONTROLLER_COUNT_BITWIDTH-1:0] iter_count_r; // count current iteration, 0 to count_r
     
-    logic [`CONTROLLER_MEMA_INC_BITWIDTH-1:0] mema_inc_r;     // inst.mema_inc
-    logic [`CONTROLLER_MEMB_INC_BITWIDTH-1:0] memb_inc_r;     // inst.memb_inc
+    logic [`CONTROLLER_MEMA_INC_BITWIDTH-1:0] mema_inc_r; // inst.mema_inc
+    logic [`CONTROLLER_MEMB_INC_BITWIDTH-1:0] memb_inc_r; // inst.memb_inc
 
     logic pe_inst_valid_r;
     logic buf_inst_valid_r;
     logic inst_exec_begins_r;
 
     // Drive outputs
-    assign pe_inst            = pe_inst_r;
-    assign buf_inst           = buf_inst_r;
-    assign pe_inst_valid      = pe_inst_valid_r;
-    assign buf_inst_valid     = buf_inst_valid_r;
-    assign inst_exec_begins   = inst_exec_begins_r;
+    assign pe_inst = pe_inst_r;
+    assign buf_inst = buf_inst_r;
+    assign pe_inst_valid = pe_inst_valid_r;
+    assign buf_inst_valid = buf_inst_valid_r;
+    assign inst_exec_begins = inst_exec_begins_r;
 
     // Sequential logic for FSM 
     always_ff @(posedge clk or negedge rst_n) begin
