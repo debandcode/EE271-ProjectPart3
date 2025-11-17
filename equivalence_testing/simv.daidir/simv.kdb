@@ -1,0 +1,16 @@
+rc file Version 1.0
+
+[Design]
+COMPILE_PATH=/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/equivalence_testing
+VCS_HOME=/cad/synopsys/vcs/S-2021.09-SP1/
+VERDI_HOME=
+SystemC=FALSE
+UUM=FALSE
+KDB=FALSE
+USE_NOVAS_HOME=FALSE
+COSIM=FALSE
+TOP=tb_top 
+
+[Value]
+WREALX=ffff534e50535f58
+WREALZ=ffff534e50535f5a

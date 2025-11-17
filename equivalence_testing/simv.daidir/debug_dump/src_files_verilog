@@ -1,0 +1,8 @@
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/equivalence_testing/testbench/defines.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/equivalence_testing/testbench/tb_top.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/array.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/buffer.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/controller.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/instruction_memory.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/processing_element.sv
+/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/logical/top.sv
