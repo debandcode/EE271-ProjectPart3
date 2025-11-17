@@ -132,10 +132,10 @@ module buffer (
     end
 
     // Output Reg
-    always_ff begin
+    always_ff @(posedge clk or negedge rst_n)begin
         if (!rst_n) begin 
-            matrix_data <= 0';
-            vector_data <= 0';
+            matrix_data <= '0;
+            vector_data <= '0;
         end else if (rd_func) begin
             matrix_data <= mem0_q;
             vector_data <= next_out_data;

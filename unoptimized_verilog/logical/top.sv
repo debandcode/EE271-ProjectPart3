@@ -60,14 +60,17 @@ module top(
     genvar i;
     generate
         for (i=0; i< `PE_COUNT; i=i+1) begin : PE_ARRAY
-            .clk(clk),
-            .rst_n(rst_n),
-            .pe_inst(pe_inst),
-            .pe_inst_valid(pe_inst_valid),
-            .vector_input(vector_data),
-            .matrix_input(matrix_data[i*`PE_INPUT_BITWIDTH-1 +: `PE_INPUT_BITWIDTH]),
-            .vector_output(pe_outputs[i])
+            processing_element u_pe (
+                .clk(clk),
+                .rst_n(rst_n),
+                .pe_inst(pe_inst),
+                .pe_inst_valid(pe_inst_valid),
+                .vector_input(vector_data),
+                .matrix_input(matrix_data[(i+1)*`PE_INPUT_BITWIDTH-1 -: `PE_INPUT_BITWIDTH]),
+                .vector_output(pe_outputs[i])
+            );
+            assign output_data[(i+1)*`PE_OUTPUT_BITWIDTH-1 -: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
         end 
-        assign output_data[i*`PE_OUTPUT_BITWIDTH-1 +: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
+        
     endgenerate
 endmodule
