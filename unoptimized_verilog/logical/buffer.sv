@@ -109,6 +109,7 @@ module buffer (
     // handle_read()
     logic [`MEM1_BITWIDTH-1:0] next_out_data;
     always_comb begin
+	    next_out_data = '0;
         case (buf_inst.mode)
             `MODE_INT8: begin
                 logic [7:0] elem;
