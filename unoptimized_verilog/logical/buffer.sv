@@ -47,11 +47,13 @@ module buffer (
         mem1_addr = '0;
         case (buf_inst.mode)
             `MODE_INT8: begin // int(MEMB_BITWIDTH/4) == MEMB_BITWIDTH>>2 == index of 32-bits word
-                mem1_addr = buf_inst.memb_offset[`BUF_MEMB_OFFSET_BITWIDTH-1:2]; 
+                //mem1_addr = buf_inst.memb_offset[`BUF_MEMB_OFFSET_BITWIDTH-1:2];
+		mem1_addr = buf_inst.memb_offset >> 2; 
             end
             `MODE_INT16: begin
-                mem1_addr = buf_inst.memb_offset[`BUF_MEMB_OFFSET_BITWIDTH-1:1];
-            end
+                //mem1_addr = buf_inst.memb_offset[`BUF_MEMB_OFFSET_BITWIDTH-1:1];
+                mem1_addr = buf_inst.memb_offset >> 1;
+	    end
             `MODE_INT32: begin
                 mem1_addr = buf_inst.memb_offset[`BUF_MEMB_OFFSET_BITWIDTH-1:0];
             end
@@ -83,7 +85,7 @@ module buffer (
         .clk(clk),
         .cen('0),
         .wen('1),
-        .gwen('1),
+        .gwen('1), 
         .a(mem1_addr),
         .d('0),
         .q(mem1_q)
@@ -99,8 +101,8 @@ module buffer (
     ) u_output_mem (
         .clk(clk),
         .cen('0),
-        .wen('0),
-        .gwen(write_control_n),
+        .wen('0), 
+        .gwen(write_control_n), // active low
         .a(mem2_addr),
         .d(output_data),
         .q()
@@ -119,6 +121,8 @@ module buffer (
                     2'd2: elem = mem1_q[23:16];
                     2'd3: elem = mem1_q[31:24];
                     default: elem = 8'b0;
+		    // elem = mem1_q[buf_inst.memb_offset[1:0]*8 +: 8]
+		    // optimize?
                 endcase
                 next_out_data = {4{elem}}; // repeat 4 times
             end
@@ -138,7 +142,9 @@ module buffer (
             default: next_out_data = '0;
         endcase
     end
-
+    
+    
+	    
     // Output Reg
     always_ff @(posedge clk or negedge rst_n)begin
         if (!rst_n) begin 
