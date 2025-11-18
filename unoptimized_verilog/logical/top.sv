@@ -57,6 +57,7 @@ module top(
     );
 
     logic [`PE_OUTPUT_BITWIDTH-1:0] pe_outputs [`PE_COUNT-1:0];
+
     genvar i;
     generate
         for (i=0; i< `PE_COUNT; i=i+1) begin : PE_ARRAY
@@ -65,12 +66,17 @@ module top(
                 .rst_n(rst_n),
                 .pe_inst(pe_inst),
                 .pe_inst_valid(pe_inst_valid),
-                .vector_input(vector_data),
-                .matrix_input(matrix_data[(i+1)*`PE_INPUT_BITWIDTH-1 -: `PE_INPUT_BITWIDTH]),
+                .matrix_input(vector_data), // swap matrix and vector input just to try
+                .vector_input(matrix_data[(i+1)*`PE_INPUT_BITWIDTH-1 -: `PE_INPUT_BITWIDTH]),
                 .vector_output(pe_outputs[i])
             );
-            assign output_data[(i+1)*`PE_OUTPUT_BITWIDTH-1 -: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
+	    assign output_data[(i+1)*`PE_OUTPUT_BITWIDTH-1 -: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
+            
         end 
         
     endgenerate
+
+
+
+
 endmodule
