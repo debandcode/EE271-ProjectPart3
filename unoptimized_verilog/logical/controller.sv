@@ -66,6 +66,7 @@ module controller(
             case (state)
                 IDLE: begin
                     if (inst_valid) begin
+			inst_exec_begins_r <= 1'b1; // signal to start executing, from idle to exec    
                         buf_inst_r <= inst.buf_instruction;
                         pe_inst_r <= inst.pe_instruction;
                         count_r <= inst.count;
@@ -82,9 +83,8 @@ module controller(
                     buf_inst_valid_r <= 1'b1;
 
                     // check if this is the final iteration
-                    if (iter_count_r == count_r) begin
+                    if (iter_count_r >= count_r) begin
                         state <= IDLE; // completed, back to IDLE
-                        inst_exec_begins_r <= 1'b1; // pulse the instruction memory to fetch the next instruction
                     end else begin
                         iter_count_r <= iter_count_r + 1'b1;
                         buf_inst_r.mema_offset <= buf_inst_r.mema_offset + mema_inc_r;
