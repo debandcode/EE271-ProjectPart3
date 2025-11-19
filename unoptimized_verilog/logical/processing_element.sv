@@ -110,19 +110,19 @@ module processing_element(
 						`PE_OUT_VALUE :begin
 							case (pe_inst.mode)
 								`MODE_INT8: begin
-									for (int i=0; i< `PE_INPUT_BITWIDTH/8; i++) begin
-										out_next[8*i +: 8] = signed'(acc_reg[16*i +:8]); //lower 8 bit of the 16, then concat 4 to make 32
+									for (int i = 0; i < `PE_INPUT_BITWIDTH / 8; i++) begin
+										out_next[8*i +: 8] = signed'(acc_reg[16*i +: 8]);
 									end
 								end
 
 								`MODE_INT16: begin
-									for (int i=0; i<`PE_INPUT_BITWIDTH/16; i++) begin
+									for (int i = 0; i < `PE_INPUT_BITWIDTH / 16; i++) begin
 										out_next[16*i +: 16] = signed'(acc_reg[32*i +: 16]);
 									end
 								end
 
 								`MODE_INT32: begin
-									out_next = acc_reg[31:0];
+									out_next = signed'(acc_reg);
 								end
 
 								default: begin
@@ -131,46 +131,38 @@ module processing_element(
 						end
 
 				    	// PASS
-				    	`PE_PASS_VALUE: begin
-					    	case (pe_inst.mode)
-						    	`MODE_INT8: begin
-									for (int i=0; i<`PE_INPUT_BITWIDTH/8; i++) begin
-										logic signed [7:0] a_s;
-										logic signed [15:0] acc_s;
+                        `PE_PASS_VALUE: begin
+                            case (pe_inst.mode)
+                                `MODE_INT8: begin
+                                    for (int i=0; i<`PE_INPUT_BITWIDTH/8; i++) begin
+                                        logic signed [7:0] a_s;
+                                        a_s = vector_input[8*i +: 8];
+                                        acc_next[16*i +: 16] = {{8{a_s[7]}}, a_s};
+                                    end
+                                end
 
-										a_s = vector_input[8*i +: 8];
-										acc_s = {{8{a_s[7]}}, a_s}; // make it signed
-									
-										acc_next[16*i +: 16] = acc_s;
-									end
-								end
+                                `MODE_INT16: begin
+                                    for (int i=0; i<`PE_INPUT_BITWIDTH/16; i++) begin
+                                        logic signed [15:0] a_s;
+                                        a_s = vector_input[16*i +: 16];
+                                        acc_next[32*i +: 32] = {{16{a_s[15]}}, a_s};
+                                    end
+                                end
 
-								`MODE_INT16: begin
-									for (int i=0; i<`PE_INPUT_BITWIDTH/16; i++) begin
-									logic signed [15:0] a_s;
-									logic signed [31:0] acc_s;
+                                `MODE_INT32: begin
+                                    logic signed [31:0] a_s;
+                                    logic signed [63:0] acc_s;
 
-									a_s = vector_input[16*i +: 16];
-									acc_s = {{16{a_s[15]}}, a_s}; // make it signed
+                                    a_s = vector_input;
+                                    acc_s = {{32{a_s[31]}}, a_s}; // keep prior INT32 behavior
 
-									acc_next[32*i +: 32] = acc_s;
-									end
-								end
+                                    acc_next = acc_s;
+                                end
 
-								`MODE_INT32: begin
-									logic signed [31:0] a_s;
-									logic signed [63:0] acc_s;
-
-									a_s = vector_input;
-									acc_s = {{32{a_s[31]}}, a_s}; // make it signed
-
-									acc_next = acc_s;
-								end
-
-								default: begin
-								end
-							endcase
-						end
+                                default: begin
+                                end
+                            endcase
+                        end
 
 
 						// CLR
@@ -196,6 +188,7 @@ module processing_element(
 								logic signed [15:0] res_s;
 
 								acc_s = acc_reg[16*i +: 16];
+
 								res_s = acc_s >>> shift;
 
 								acc_next[16*i +:16] = res_s;
@@ -208,6 +201,7 @@ module processing_element(
 								logic signed [31:0] res_s;
 
 								acc_s = acc_reg[32*i +: 32];
+
 								res_s = acc_s >>> shift;
 
 								acc_next[32*i +:32] = res_s;
