@@ -111,18 +111,18 @@ module processing_element(
 							case (pe_inst.mode)
 								`MODE_INT8: begin
 									for (int i = 0; i < `PE_INPUT_BITWIDTH / 8; i++) begin
-										out_next[8*i +: 8] = signed'(acc_reg[16*i +: 8]);
+										out_next[8*i +: 8] = acc_reg[16*i +: 8];
 									end
 								end
 
 								`MODE_INT16: begin
 									for (int i = 0; i < `PE_INPUT_BITWIDTH / 16; i++) begin
-										out_next[16*i +: 16] = signed'(acc_reg[32*i +: 16]);
+										out_next[16*i +: 16] = acc_reg[32*i +: 16];
 									end
 								end
 
 								`MODE_INT32: begin
-									out_next = signed'(acc_reg);
+									out_next = acc_reg;
 								end
 
 								default: begin
@@ -135,28 +135,18 @@ module processing_element(
                             case (pe_inst.mode)
                                 `MODE_INT8: begin
                                     for (int i=0; i<`PE_INPUT_BITWIDTH/8; i++) begin
-                                        logic signed [7:0] a_s;
-                                        a_s = vector_input[8*i +: 8];
-                                        acc_next[16*i +: 16] = {{8{a_s[7]}}, a_s};
+					acc_next[16*i +: 16] = vector_input[8*i +: 8];
                                     end
                                 end
 
                                 `MODE_INT16: begin
                                     for (int i=0; i<`PE_INPUT_BITWIDTH/16; i++) begin
-                                        logic signed [15:0] a_s;
-                                        a_s = vector_input[16*i +: 16];
-                                        acc_next[32*i +: 32] = {{16{a_s[15]}}, a_s};
+					acc_next[32*i +: 32] = vector_input[16*i +: 16];
                                     end
                                 end
 
                                 `MODE_INT32: begin
-                                    logic signed [31:0] a_s;
-                                    logic signed [63:0] acc_s;
-
-                                    a_s = vector_input;
-                                    acc_s = {{32{a_s[31]}}, a_s}; // keep prior INT32 behavior
-
-                                    acc_next = acc_s;
+                                    acc_next = vector_input;
                                 end
 
                                 default: begin
@@ -188,9 +178,7 @@ module processing_element(
 								logic signed [15:0] res_s;
 
 								acc_s = acc_reg[16*i +: 16];
-
 								res_s = acc_s >>> shift;
-
 								acc_next[16*i +:16] = res_s;
 							end
 						end
@@ -201,9 +189,7 @@ module processing_element(
 								logic signed [31:0] res_s;
 
 								acc_s = acc_reg[32*i +: 32];
-
 								res_s = acc_s >>> shift;
-
 								acc_next[32*i +:32] = res_s;
 							end
 						end
@@ -214,7 +200,6 @@ module processing_element(
 
 							acc_s = acc_reg;
 							res_s = acc_s >>> shift;
-
 							acc_next = res_s;
 						end
 
