@@ -19,7 +19,7 @@ module controller(
 
 );
 
-    typedef enum {IDLE, EXECUTING} fsm_t; 
+    typedef enum logic [1:0] {IDLE, ISSUE, WAIT_DATA, EXECUTE} fsm_t; 
     fsm_t state; // current state register, updated in always_ff
 
     // START IMPLEMENTATION
@@ -36,6 +36,7 @@ module controller(
     logic pe_inst_valid_r;
     logic buf_inst_valid_r;
     logic inst_exec_begins_r;
+    logic is_out_op_r; // Flag to delay buffer write for one cycle on an OUT instruction
 
     // Drive outputs
     assign pe_inst = pe_inst_r;
@@ -58,39 +59,49 @@ module controller(
             pe_inst_valid_r <= 1'b0;
             buf_inst_valid_r <= 1'b0;
             inst_exec_begins_r <= 1'b0;
+            is_out_op_r <= 1'b0;
         end else begin
+            // Default assignments: de-assert signals unless explicitly asserted in the FSM.
             pe_inst_valid_r <= 1'b0;
             buf_inst_valid_r <= 1'b0;
             inst_exec_begins_r <= 1'b0;
+            is_out_op_r <= 1'b0; // unused, kept for completeness
 
-            case (state)
+            case (state) 
                 IDLE: begin
                     if (inst_valid) begin
-			inst_exec_begins_r <= 1'b1; // signal to start executing, from idle to exec    
                         buf_inst_r <= inst.buf_instruction;
                         pe_inst_r <= inst.pe_instruction;
                         count_r <= inst.count;
                         mema_inc_r <= inst.mema_inc;
                         memb_inc_r <= inst.memb_inc;
                         iter_count_r <= '0;
-                        
-                        state <= EXECUTING;
+                        state <= ISSUE;
                     end
                 end
 
-                EXECUTING: begin
-                    pe_inst_valid_r <= 1'b1;
+                ISSUE: begin
+                    // Launch buffer read/write request
                     buf_inst_valid_r <= 1'b1;
+                    state <= WAIT_DATA;
+                end
 
-                    // check if this is the final iteration
-                    if (iter_count_r >= count_r) begin
-                        state <= IDLE; // completed, back to IDLE
+                WAIT_DATA: begin
+                    // Give the buffer's synchronous memories one cycle to respond
+                    state <= EXECUTE;
+                end
+
+                EXECUTE: begin
+                    // PE consumes operands produced by the last ISSUE state
+                    pe_inst_valid_r <= 1'b1;
+                    if (iter_count_r == count_r) begin
+                        inst_exec_begins_r <= 1'b1;
+                        state <= IDLE;
                     end else begin
                         iter_count_r <= iter_count_r + 1'b1;
                         buf_inst_r.mema_offset <= buf_inst_r.mema_offset + mema_inc_r;
                         buf_inst_r.memb_offset <= buf_inst_r.memb_offset + memb_inc_r;
-
-                        state <= EXECUTING;
+                        state <= ISSUE;
                     end
                 end
 
