@@ -19,11 +19,11 @@ module controller(
 
 );
 
-    typedef enum logic [1:0] {IDLE, ISSUE, WAIT_DATA, EXECUTE} fsm_t; 
+    typedef enum logic [1:0] {IDLE, ISSUE, WAIT_DATA, EXECUTING} fsm_t; 
     fsm_t state; // current state register, updated in always_ff
 
     // START IMPLEMENTATION
-    // reg/latched version of instructions and counts
+    // Reg/latched version of instructions and counts
     pe_inst_t pe_inst_r;
     buf_inst_t buf_inst_r;
 
@@ -36,7 +36,6 @@ module controller(
     logic pe_inst_valid_r;
     logic buf_inst_valid_r;
     logic inst_exec_begins_r;
-    logic is_out_op_r; // Flag to delay buffer write for one cycle on an OUT instruction
 
     // Drive outputs
     assign pe_inst = pe_inst_r;
@@ -59,13 +58,11 @@ module controller(
             pe_inst_valid_r <= 1'b0;
             buf_inst_valid_r <= 1'b0;
             inst_exec_begins_r <= 1'b0;
-            is_out_op_r <= 1'b0;
         end else begin
-            // Default assignments: de-assert signals unless explicitly asserted in the FSM.
+            // default assignments: de-assert signals unless explicitly asserted in the FSM
             pe_inst_valid_r <= 1'b0;
             buf_inst_valid_r <= 1'b0;
             inst_exec_begins_r <= 1'b0;
-            is_out_op_r <= 1'b0; // unused, kept for completeness
 
             case (state) 
                 IDLE: begin
@@ -88,10 +85,10 @@ module controller(
 
                 WAIT_DATA: begin
                     // Give the buffer's synchronous memories one cycle to respond
-                    state <= EXECUTE;
+                    state <= EXECUTING;
                 end
 
-                EXECUTE: begin
+                EXECUTING: begin
                     // PE consumes operands produced by the last ISSUE state
                     pe_inst_valid_r <= 1'b1;
                     if (iter_count_r == count_r) begin
