@@ -46,7 +46,6 @@ module top(
     logic [`MEM0_BITWIDTH-1:0] matrix_data;
     logic [`MEM1_BITWIDTH-1:0] vector_data;
     logic [`MEM2_BITWIDTH-1:0] output_data;
-
     buffer u_buffer(
         .clk(clk),
         .rst_n(rst_n),
@@ -58,6 +57,8 @@ module top(
     );
 
     logic [`PE_OUTPUT_BITWIDTH-1:0] pe_outputs [`PE_COUNT-1:0];
+    logic [`MEM2_BITWIDTH-1:0]      pe_outputs_concat;
+    logic                           pe_out_valid_d;
 
     genvar i;
     generate
@@ -67,19 +68,30 @@ module top(
                 .rst_n(rst_n),
                 .pe_inst(pe_inst),
                 .pe_inst_valid(pe_inst_valid),
-                .vector_input(vector_data),
                 .matrix_input(matrix_data[(i+1)*`PE_INPUT_BITWIDTH-1 -: `PE_INPUT_BITWIDTH]),
+                .vector_input(vector_data),
                 .vector_output(pe_outputs[i])
             );
-	    assign output_data[(i+1)*`PE_OUTPUT_BITWIDTH-1 -: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
-            
-        end
-
-
+            assign pe_outputs_concat[(i+1)*`PE_OUTPUT_BITWIDTH-1 -: `PE_OUTPUT_BITWIDTH] = pe_outputs[i];
+        end 
         
     endgenerate
 
+    wire pe_out_pulse = pe_inst_valid &&
+                        (pe_inst.opcode == `PE_OUT_OPCODE) &&
+                        (pe_inst.value  == `PE_OUT_VALUE);
 
-
+    // Register PE outputs one cycle after an OUT instruction
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            output_data    <= '0;
+            pe_out_valid_d <= 1'b0;
+        end else begin
+            pe_out_valid_d <= pe_out_pulse;
+            if (pe_out_valid_d) begin
+                output_data <= pe_outputs_concat;
+            end
+        end
+    end
 
 endmodule
