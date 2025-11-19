@@ -87,8 +87,8 @@ module top(
             output_data    <= '0;
             pe_out_valid_d <= 1'b0;
         end else begin
-            pe_out_valid_d <= pe_out_pulse;
-            if (pe_out_valid_d) begin
+            //pe_out_valid_d <= pe_out_pulse;
+            if (pe_out_pulse) begin
                 output_data <= pe_outputs_concat;
             end
         end
