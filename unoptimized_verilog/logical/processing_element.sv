@@ -223,13 +223,14 @@ module processing_element(
     always_ff @(posedge clk or negedge rst_n) begin
 	    if (!rst_n) begin
 		    acc_reg <= '0;
-		    out_reg <= '0;
+		    //out_reg <= '0;
 	    end else begin
 		    acc_reg <= acc_next;
-		    out_reg <= out_next;
+		    //out_reg <= out_next;
 	    end
     end
     
+    assign out_reg = out_next;
 
 			    
 
