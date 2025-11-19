@@ -111,13 +111,13 @@ module processing_element(
 							case (pe_inst.mode)
 								`MODE_INT8: begin
 									for (int i=0; i< `PE_INPUT_BITWIDTH/8; i++) begin
-										out_next[8*i +: 8] = acc_reg[16*i +: 8];
+										out_next[8*i +: 8] = signed'(acc_reg[16*i +:8]); //lower 8 bit of the 16, then concat 4 to make 32
 									end
 								end
 
 								`MODE_INT16: begin
 									for (int i=0; i<`PE_INPUT_BITWIDTH/16; i++) begin
-										out_next[16*i +: 16] = acc_reg[32*i +: 16];
+										out_next[16*i +: 16] = signed'(acc_reg[32*i +: 16]);
 									end
 								end
 
@@ -140,7 +140,7 @@ module processing_element(
 
 										a_s = vector_input[8*i +: 8];
 										acc_s = {{8{a_s[7]}}, a_s}; // make it signed
-
+									
 										acc_next[16*i +: 16] = acc_s;
 									end
 								end
@@ -196,7 +196,6 @@ module processing_element(
 								logic signed [15:0] res_s;
 
 								acc_s = acc_reg[16*i +: 16];
-
 								res_s = acc_s >>> shift;
 
 								acc_next[16*i +:16] = res_s;
@@ -209,7 +208,6 @@ module processing_element(
 								logic signed [31:0] res_s;
 
 								acc_s = acc_reg[32*i +: 32];
-
 								res_s = acc_s >>> shift;
 
 								acc_next[32*i +:32] = res_s;
