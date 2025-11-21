@@ -34,7 +34,7 @@ int8_test:
 	@# Compiling Software
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 1024 1024 -5 5 --out $(MATRIX) --seed     0
-	cd $(SOFTWARE_DIR) && $(MG) 1024    1 -5 5 --out $(VECTOR) --seed 12345
+	cd $(SOFTWARE_DIR) && $(MG) 1024 1 -5 5 --out $(VECTOR) --seed 12345
 	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT8 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE)
 	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS)
 

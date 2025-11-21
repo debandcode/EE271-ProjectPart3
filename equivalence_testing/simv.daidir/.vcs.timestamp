@@ -37,13 +37,13 @@
 /cad/synopsys/vcs/S-2021.09-SP1/linux64/bin/vcs1
 tb_top
 ./testbench/tb_top_tmp.f
-78
+77
 which_declare=declare -f
 _LMFILES__modshare=/etc/modulefiles/base/ZZ:1:/etc/modulefiles/dc_shell/S-2021.06-SP5-4:1:/etc/modulefiles/vcs/S-2021.09-SP1:1
 _LMFILES_=/etc/modulefiles/base/ZZ:/etc/modulefiles/vcs/S-2021.09-SP1:/etc/modulefiles/dc_shell/S-2021.06-SP5-4
 _CONDA_ROOT=/home/users/shern/miniconda3
 _CONDA_EXE=/home/users/shern/miniconda3/bin/conda
-XDG_SESSION_ID=35558
+XDG_SESSION_ID=8998
 XDG_RUNTIME_DIR=/run/user/468705
 XDG_DATA_DIRS=/home/users/shern/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
 VMR_MODE_FLAG=64
@@ -62,22 +62,22 @@ UNAME=/bin/uname
 TOOL_HOME=/cad/synopsys/vcs/S-2021.09-SP1/linux64
 SYNOPSYS_LICENSE=27000@cadlic0.stanford.edu
 SYNOPSYS=/cad/synopsys/syn/S-2021.06-SP5-4
-SSH_TTY=/dev/pts/2
-SSH_CONNECTION=172.24.94.106 41832 172.24.94.118 22
-SSH_CLIENT=172.24.94.106 41832 22
+SSH_TTY=/dev/pts/0
+SSH_CONNECTION=171.67.96.124 45226 172.24.94.106 22
+SSH_CLIENT=171.67.96.124 45226 22
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SPRINGSOFT_LICENSE=5219@cadlic0.stanford.edu
 SNPS_VCS_CLANG_PATH=/cad/synopsys/vcs/S-2021.09-SP1//linux64/clang
 SNPS_INTERNAL_VCS_LINUX_OS=linux
 SCRNAME=vcs
 SCRIPT_NAME=vcs
-REMOTEHOST=172.24.94.106
+REMOTEHOST=171.67.96.124
 PATH_modshare=/cad/synopsys/syn/S-2021.06-SP5-4/amd64/syn/bin/:1:/cad/synopsys/vcs/S-2021.09-SP1//bin:1:/home/users/shern/miniconda3/bin:1:/usr/sbin:1:/cad/common/Linux/x86_64/bin:1:/home/users/shern/miniconda3/condabin:1:/usr/bin:1:/cad/synopsys/vcs/S-2021.09-SP1//gui/dve/bin:1:/usr/local/sbin:1:/usr/share/Modules/bin:1:/usr/local/bin:1
 OVA_UUM=0
 OSTYPE=linux
 MODULES_USE_COMPAT_VERSION=0
 MODULES_RUN_QUARANTINE=LD_LIBRARY_PATH LD_PRELOAD
-MODULES_REL=4.18.0-553.72.1.el8_10.x86_64
+MODULES_REL=4.18.0-553.74.1.el8_10.x86_64
 MODULES_OS=Linux
 MODULES_MACH=x86_64
 MODULES_LMPREREQ_modshare=dc_shell/S-2021.06-SP5-4&base:1:vcs/S-2021.09-SP1&base:1
@@ -88,15 +88,14 @@ MODULEPATH_modshare=/usr/share/Modules/modulefiles:2:/etc/modulefiles:2:/usr/sha
 MODULEPATH=/etc/scl/modulefiles:/etc/scl/modulefiles:/usr/share/Modules/modulefiles:/etc/modulefiles:/usr/share/modulefiles
 MFLAGS=
 MANPATH_modshare=/cad/synopsys/syn/S-2021.06-SP5-4/doc/snps_gui/man:1:/cad/synopsys/vcs/S-2021.09-SP1//doc/man:1::1:/cad/synopsys/syn/S-2021.06-SP5-4/doc/snps_tcl/man:1:/cad/synopsys/syn/S-2021.06-SP5-4/doc/syn/man:1:/usr/share/man:1
-MAKE_TERMOUT=/dev/pts/2
-MAKE_TERMERR=/dev/pts/2
+MAKE_TERMOUT=/dev/pts/0
+MAKE_TERMERR=/dev/pts/0
 MAKELEVEL=1
 MAKEFLAGS=
 LOADEDMODULES_modshare=dc_shell/S-2021.06-SP5-4:1:vcs/S-2021.09-SP1:1:base/ZZ:1
 LOADEDMODULES=base/ZZ:vcs/S-2021.09-SP1:dc_shell/S-2021.06-SP5-4
 LESSOPEN=||/usr/bin/lesspipe.sh %s
 LC_ALL=C
-KRB5CCNAME=KCM:
 HOSTTYPE=x86_64-linux
 HISTCONTROL=ignoreboth
 GROUP=operator
@@ -118,23 +117,23 @@ BASH_FUNC_ml%%=() {  module ml "$@"_}
 BASH_FUNC__module_raw%%=() {  unset _mlshdbg;_ if [ "${MODULES_SILENT_SHELL_DEBUG:-0}" = '1' ]; then_ case "$-" in _ *v*x*)_ set +vx;_ _mlshdbg='vx'_ ;;_ *v*)_ set +v;_ _mlshdbg='v'_ ;;_ *x*)_ set +x;_ _mlshdbg='x'_ ;;_ *)_ _mlshdbg=''_ ;;_ esac;_ fi;_ unset _mlre _mlIFS;_ if [ -n "${IFS+x}" ]; then_ _mlIFS=$IFS;_ fi;_ IFS=' ';_ for _mlv in ${MODULES_RUN_QUARANTINE:-};_ do_ if [ "${_mlv}" = "${_mlv##*[!A-Za-z0-9_]}" -a "${_mlv}" = "${_mlv#[0-9]}" ]; then_ if [ -n "`eval 'echo ${'$_mlv'+x}'`" ]; then_ _mlre="${_mlre:-}${_mlv}_modquar='`eval 'echo ${'$_mlv'}'`' ";_ fi;_ _mlrv="MODULES_RUNENV_${_mlv}";_ _mlre="${_mlre:-}${_mlv}='`eval 'echo ${'$_mlrv':-}'`' ";_ fi;_ done;_ if [ -n "${_mlre:-}" ]; then_ eval `eval ${_mlre} /usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl bash '"$@"'`;_ else_ eval `/usr/bin/tclsh /usr/share/Modules/libexec/modulecmd.tcl bash "$@"`;_ fi;_ _mlstatus=$?;_ if [ -n "${_mlIFS+x}" ]; then_ IFS=$_mlIFS;_ else_ unset IFS;_ fi;_ unset _mlre _mlv _mlrv _mlIFS;_ if [ -n "${_mlshdbg:-}" ]; then_ set -$_mlshdbg;_ fi;_ unset _mlshdbg;_ return $_mlstatus_}
 0
 2
-127769283 ./testbench/
-877945253 ../unoptimized_verilog/logical
+642055906 ./testbench/
+135125761 ../unoptimized_verilog/logical
 10
 1763405901 ../unoptimized_verilog/logical/array.sv
-1763282366 ../unoptimized_verilog/logical/processing_element.sv
+1763583470 ../unoptimized_verilog/logical/processing_element.sv
 1763242307 ../unoptimized_verilog/logical/instruction_memory.sv
-1763405901 ../unoptimized_verilog/logical/controller.sv
-1763407478 ../unoptimized_verilog/logical/buffer.sv
-1763407577 ../unoptimized_verilog/logical/top.sv
-1763408004 ./testbench/defines.sv
+1763769166 ../unoptimized_verilog/logical/controller.sv
+1763578585 ../unoptimized_verilog/logical/buffer.sv
+1763583470 ../unoptimized_verilog/logical/top.sv
+1763769194 ./testbench/defines.sv
 1763242307 ./testbench/tb_top.sv
-1763408004 ./testbench/tb_top_tmp.f
+1763769194 ./testbench/tb_top_tmp.f
 1638245157 /cad/synopsys/vcs/S-2021.09-SP1/linux64/lib/vcsdp.tab
 4
 1638257447 /cad/synopsys/vcs/S-2021.09-SP1/linux64/lib/libvirsim.so
 1638246089 /cad/synopsys/vcs/S-2021.09-SP1/linux64/lib/liberrorinf.so
 1638245983 /cad/synopsys/vcs/S-2021.09-SP1/linux64/lib/libsnpsmalloc.so
 1638246086 /cad/synopsys/vcs/S-2021.09-SP1/linux64/lib/libvfs.so
-1763408009 simv.daidir
+1763769199 simv.daidir
 -1 partitionlib
