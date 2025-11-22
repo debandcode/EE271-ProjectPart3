@@ -34,15 +34,15 @@ module controller(
     logic [`CONTROLLER_MEMB_INC_BITWIDTH-1:0] memb_inc_r; // inst.memb_inc
 
     logic pe_inst_valid_r;
-    logic buf_inst_valid_r;
-    logic inst_exec_begins_r;
+    // ////////////////////logic buf_inst_valid_r;
+    /////////////////logic inst_exec_begins_r;
 
     // Drive outputs
     assign pe_inst = pe_inst_r;
     assign buf_inst = buf_inst_r;
     assign pe_inst_valid = pe_inst_valid_r;
-    assign buf_inst_valid = buf_inst_valid_r;
-    assign inst_exec_begins = inst_exec_begins_r;
+    // //////////////////////assign buf_inst_valid = buf_inst_valid_r;
+    ////////////////////assign inst_exec_begins = inst_exec_begins_r;
 
     // Sequential logic for FSM 
     always_ff @(posedge clk or negedge rst_n) begin
@@ -56,13 +56,13 @@ module controller(
             mema_inc_r <= '0;
             memb_inc_r <= '0;
             pe_inst_valid_r <= 1'b0;
-            buf_inst_valid_r <= 1'b0;
-            inst_exec_begins_r <= 1'b0;
+            buf_inst_valid <= 1'b0;
+            inst_exec_begins <= 1'b0;
         end else begin
             // default assignments: de-assert signals unless explicitly asserted in the FSM
             pe_inst_valid_r <= 1'b0;
-            buf_inst_valid_r <= 1'b0;
-            inst_exec_begins_r <= 1'b0;
+            buf_inst_valid <= 1'b0;
+            inst_exec_begins <= 1'b0;
 
             case (state) 
                 IDLE: begin
@@ -73,18 +73,14 @@ module controller(
                         mema_inc_r <= inst.mema_inc;
                         memb_inc_r <= inst.memb_inc;
                         iter_count_r <= '0;
-                        state <= ISSUE;
+                        buf_inst_valid <= 1'b1;           // buffer instruction valid can be set at the same time as mem address
+                        state <= ISSUE;                   
                     end
                 end
 
                 ISSUE: begin
                     // Launch buffer read/write request
-                    buf_inst_valid_r <= 1'b1;
-                    state <= WAIT_DATA;
-                end
-
-                WAIT_DATA: begin
-                    // Give the buffer's synchronous memories one cycle to respond
+                    // buf_inst_valid <= 1'b1;
                     state <= EXECUTING;
                 end
 
@@ -92,13 +88,15 @@ module controller(
                     // PE consumes operands produced by the last ISSUE state
                     pe_inst_valid_r <= 1'b1;
                     if (iter_count_r == count_r) begin
-                        inst_exec_begins_r <= 1'b1;
+                        inst_exec_begins <= 1'b1;
+                        buf_inst_valid <= 1'b0;       
                         state <= IDLE;
                     end else begin
                         iter_count_r <= iter_count_r + 1'b1;
                         buf_inst_r.mema_offset <= buf_inst_r.mema_offset + mema_inc_r;
                         buf_inst_r.memb_offset <= buf_inst_r.memb_offset + memb_inc_r;
-                        state <= ISSUE;
+                        buf_inst_valid <= 1'b1;                      // set inst_valid same time as mem
+                        state <= ISSUE;                         
                     end
                 end
 
