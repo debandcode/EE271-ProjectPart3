@@ -91,8 +91,8 @@ module buffer (
     // Pipeline registers to align the synchronous memories with the PE inputs
     logic rd_func_d;
     logic [`BUF_MEMB_OFFSET_BITWIDTH-1:0] memb_offset_reg;
-    logic [`MEM0_BITWIDTH-1:0]            matrix_data_reg;
-    logic [`MEM1_BITWIDTH-1:0]            vector_data_reg;
+    // logic [`MEM0_BITWIDTH-1:0]            matrix_data_reg;
+    // logic [`MEM1_BITWIDTH-1:0]            vector_data_reg;
     logic [`BUF_MODE_BITWIDTH-1:0] mode_reg;
 
     // Vector decoder output (combinational)
@@ -111,26 +111,26 @@ module buffer (
         if (!rst_n) begin
             rd_func_d       <= 1'b0;
             memb_offset_reg <= '0;
-            matrix_data_reg <= '0;
-            vector_data_reg <= '0;
-	    mode_reg <= '0;
+            matrix_data <= '0;
+            vector_data <= '0;
+	        mode_reg <= '0;
         end else begin
             rd_func_d <= rd_func;
 
             if (rd_func) begin
                 memb_offset_reg <= buf_inst.memb_offset;
-		mode_reg <= buf_inst.mode;
+		        mode_reg <= buf_inst.mode;
             end
 
             if (rd_func_d) begin
-                matrix_data_reg <= mem0_q;
-                vector_data_reg <= vector_data_wire;
+                matrix_data <= mem0_q;
+                vector_data <= vector_data_wire;
             end
         end
     end
 
-    assign matrix_data = matrix_data_reg;
-    assign vector_data = vector_data_reg;
+    // assign matrix_data = matrix_data_reg;
+    // assign vector_data = vector_data_reg;
 
     // END IMPLEMENTATION
 endmodule

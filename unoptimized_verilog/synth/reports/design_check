@@ -1,0 +1,19 @@
+ 
+****************************************
+check_design summary:
+Version:     S-2021.06-SP5-4
+Date:        Tue Nov 25 13:18:50 2025
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Designs                                                             4
+    Design has no outputs ports (LINT-25)                           1
+    Black box (LINT-55)                                             3
+--------------------------------------------------------------------------------
+
+Warning: Design 'top' does not have any output ports. (LINT-25)
+Information: Design 'array_DW512_NW65536_AW16' does not contain any cells or nets. (LINT-55)
+Information: Design 'array_DW32_NW16384_AW14' does not contain any cells or nets. (LINT-55)
+Information: Design 'array_DW63_NW128_AW7' does not contain any cells or nets. (LINT-55)
+1

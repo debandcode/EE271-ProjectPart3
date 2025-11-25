@@ -27,15 +27,14 @@ module processing_element(
     logic signed [`PE_ACCUMULATION_BITWIDTH-1:0] acc_reg;
     logic signed [`PE_ACCUMULATION_BITWIDTH-1:0] acc_next;
 
-    logic [`PE_OUTPUT_BITWIDTH-1:0] out_reg;
+    // logic [`PE_OUTPUT_BITWIDTH-1:0] out_reg;
     logic [`PE_OUTPUT_BITWIDTH-1:0] out_next;
-
-    assign vector_output = out_reg;
 
     // Combinational next state logic 
     always_comb begin
 	    acc_next = acc_reg;
-	    out_next = out_reg;
+	    // out_next = out_reg;
+
 
   	    if (pe_inst_valid) begin
 		    case (pe_inst.opcode)
@@ -43,57 +42,117 @@ module processing_element(
 				    case (pe_inst.value)
 					    // MAC
 					    `PE_MAC_VALUE: begin
+							logic signed [31:0] mul32_a, mul32_b;
+							logic signed [63:0] mul32_p;
+							logic signed [63:0] mul32_acc;
+							logic signed [63:0] mul32_res;
+
+							logic signed [15:0] mul16_a;
+							logic signed [15:0] mul16_b;
+							logic signed [31:0] mul16_p;
+							logic signed [31:0] mul16_acc;
+							logic signed [31:0] mul16_res;
+
+							logic signed [7:0]  mul8_a [1:0];
+							logic signed [7:0]  mul8_b [1:0];
+							logic signed [15:0] mul8_p [1:0];
+							logic signed [15:0] mul8_acc [1:0];
+							logic signed [15:0] mul8_res [1:0];
 						    case (pe_inst.mode)
 							    `MODE_INT8: begin
 								    for (int i=0; i< `PE_INPUT_BITWIDTH/8; i++) begin
-									    logic signed [7:0] a_s;
-									    logic signed [7:0] b_s;
-									    logic signed [15:0] acc_s;
-									    logic signed [15:0] mul_s;
-									    logic signed [15:0] res_s;
+									    if (i<=1) begin
+											mul8_a[i] = vector_input[8*i +: 8];
+											mul8_b[i] = matrix_input[8*i +: 8];
+											mul8_acc[i] = acc_reg[16*i +: 16];
+											mul8_p[i] = mul8_a[i]*mul8_b[i];
+											mul8_res[i] = mul8_p[i] + mul8_acc[i];
+											acc_next[16*i +:16] = mul8_res[i];
+										end
+										else if (i==2) begin
+											mul16_a = vector_input[8*i +: 8];
+											mul16_b = matrix_input[8*i +: 8];
+											mul16_acc = acc_reg[16*i +: 16];
+											mul16_p = mul16_a*mul16_b;
+											mul16_res = mul16_p + mul16_acc;
+											acc_next[16*i +:16] = mul16_res;
+										end
+										else begin 
+											mul32_a = vector_input[8*i +: 8];
+											mul32_b = matrix_input[8*i +: 8];
+											mul32_acc = acc_reg[16*i +: 16];
+											mul32_p = mul32_a*mul32_b;
+											mul32_res = mul32_p + mul32_acc;
+											acc_next[16*i +:16] = mul32_res;
+										end
+									
+										// logic signed [7:0] a_s;
+									    // logic signed [7:0] b_s;
+									    // logic signed [15:0] acc_s;
+									    // logic signed [15:0] mul_s;
+									    // logic signed [15:0] res_s;
 
-									    a_s = vector_input[8*i +: 8];
-									    b_s = matrix_input[8*i +: 8];
-									    acc_s = acc_reg[16*i +: 16];
-									    mul_s = a_s*b_s;
-									    res_s = mul_s + acc_s;
+									    // a_s = vector_input[8*i +: 8];
+									    // b_s = matrix_input[8*i +: 8];
+									    // acc_s = acc_reg[16*i +: 16];
+									    // mul_s = a_s*b_s;
+									    // res_s = mul_s + acc_s;
 
-									    acc_next[16*i +:16] = res_s;
+									    // acc_next[16*i +:16] = res_s;
 								    end
 							    end
 
 							    `MODE_INT16: begin
-								    for (int i=0; i< `PE_INPUT_BITWIDTH/16; i++) begin
-									    logic signed [15:0] a_s;
-									    logic signed [15:0] b_s;
-									    logic signed [31:0] acc_s;
-									    logic signed [31:0] mul_s;
-									    logic signed [31:0] res_s;
+									mul16_a = vector_input[16*0 +: 16];
+									mul16_b = matrix_input[16*0 +: 16];
+									mul16_acc = acc_reg[32*0 +: 32];
+									mul16_p = mul16_a*mul16_b;
+									mul16_res = mul16_p + mul16_acc;
+									acc_next[32*0 +:32] = mul16_res;
+									
+									mul32_a = vector_input[16*1 +: 16];
+									mul32_b = matrix_input[16*1 +: 16];
+									mul32_acc = acc_reg[32*1 +: 32];
+									mul32_p = mul32_a*mul32_b;
+									mul32_res = mul32_p + mul32_acc;
+									acc_next[32*1 +:32] = mul32_res;
+
+								    // for (int i=0; i< `PE_INPUT_BITWIDTH/16; i++) begin
+									//     logic signed [15:0] a_s;
+									//     logic signed [15:0] b_s;
+									//     logic signed [31:0] acc_s;
+									//     logic signed [31:0] mul_s;
+									//     logic signed [31:0] res_s;
 									    
-									    a_s = vector_input[16*i +: 16];
-									    b_s = matrix_input[16*i +: 16];
-									    acc_s = acc_reg[32*i +: 32];
-									    mul_s = a_s*b_s;
-									    res_s = mul_s + acc_s;
+									//     a_s = vector_input[16*i +: 16];
+									//     b_s = matrix_input[16*i +: 16];
+									//     acc_s = acc_reg[32*i +: 32];
+									//     mul_s = a_s*b_s;
+									//     res_s = mul_s + acc_s;
 									    
-									    acc_next[32*i +:32] = res_s;
-								    end
-							    end
+									//     acc_next[32*i +:32] = res_s;
+								end
 
 							    `MODE_INT32: begin
-								    logic signed [31:0] a_s;
-								    logic signed [31:0] b_s;
-								    logic signed [63:0] acc_s;
-								    logic signed [63:0] mul_s;
-								    logic signed [63:0] res_s;
+									mul32_a = vector_input;
+									mul32_b = matrix_input;
+									mul32_acc = acc_reg;
+									mul32_p = mul32_a*mul32_b;
+									mul32_res = mul32_p + mul32_acc;
+									acc_next = mul32_res;
+								    // logic signed [31:0] a_s;
+								    // logic signed [31:0] b_s;
+								    // logic signed [63:0] acc_s;
+								    // logic signed [63:0] mul_s;
+								    // logic signed [63:0] res_s;
 
-								    a_s = vector_input;
-								    b_s = matrix_input;
-								    acc_s = acc_reg;
-								    mul_s = a_s*b_s;
-								    res_s = acc_s + mul_s;
+								    // a_s = vector_input;
+								    // b_s = matrix_input;
+								    // acc_s = acc_reg;
+								    // mul_s = a_s*b_s;
+								    // res_s = acc_s + mul_s;
 
-								    acc_next = res_s;
+								    // acc_next = res_s;
 							    end
 
 							    default: begin
@@ -223,14 +282,13 @@ module processing_element(
     always_ff @(posedge clk or negedge rst_n) begin
 	    if (!rst_n) begin
 		    acc_reg <= '0;
-		    //out_reg <= '0;
 	    end else begin
 		    acc_reg <= acc_next;
-		    //out_reg <= out_next;
 	    end
     end
     
-    assign out_reg = out_next;
+	assign vector_output = out_next;
+    // assign out_reg = out_next;
 
 			    
 

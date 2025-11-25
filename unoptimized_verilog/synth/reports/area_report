@@ -1,0 +1,30 @@
+ 
+****************************************
+Report : area
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:18:50 2025
+****************************************
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+
+Number of ports:                            9
+Number of nets:                        122668
+Number of cells:                       109242
+Number of combinational cells:         101740
+Number of sequential cells:              7500
+Number of macros/black boxes:               0
+Number of buf/inv:                      11137
+Number of references:                      76
+
+Combinational area:             158079.810293
+Buf/Inv area:                     6612.494016
+Noncombinational area:           40050.291275
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                198130.101567
+Total area:                 undefined
+1

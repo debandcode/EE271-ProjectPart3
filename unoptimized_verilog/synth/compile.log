@@ -1,0 +1,1106 @@
+
+                           Design Compiler Graphical 
+                                 DC Ultra (TM)
+                                  DFTMAX (TM)
+                              Power Compiler (TM)
+                                 DesignWare (R)
+                                 DC Expert (TM)
+                               Design Vision (TM)
+                               HDL Compiler (TM)
+                               VHDL Compiler (TM)
+                                  DFT Compiler
+                               Design Compiler(R)
+
+              Version S-2021.06-SP5-4 for linux64 - Aug 05, 2022 
+
+                    Copyright (c) 1988 - 2022 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+Initializing...
+# Simple synthesis script to use FreePDK/45nm libraries
+file mkdir reports
+file mkdir netlist
+remove_design -all
+1
+define_design_lib FreePDK_45nm -path "FreePDK_45nm"
+1
+set_host_options -max_cores 16
+Warning: You requested 16 cores. However, load on host caddy11.stanford.edu is 7.15. Tool will ignore the request and use 9 cores. (UIO-231)
+1
+#####################
+# Config Variables
+#####################
+#####################
+# Path Variables
+#####################
+set SYN  /cad/synopsys/syn/M-2016.12-SP2/libraries/syn/
+/cad/synopsys/syn/M-2016.12-SP2/libraries/syn/
+set OPENCELL_45 ./lib/
+./lib/
+#####################
+# Set Design Library
+#####################
+set link_library [list NangateOpenCellLibrary.db dw_foundation.sldb]
+NangateOpenCellLibrary.db dw_foundation.sldb
+set target_library [list NangateOpenCellLibrary.db]
+NangateOpenCellLibrary.db
+set synthetic_library [list  dw_foundation.sldb]
+dw_foundation.sldb
+set dw_lib     $SYN
+/cad/synopsys/syn/M-2016.12-SP2/libraries/syn/
+set sym_lib    $OPENCELL_45
+./lib/
+set target_lib $OPENCELL_45
+./lib/
+set search_path [list ./ ../rtl/  $dw_lib $target_lib $sym_lib ../params/ ]
+./ ../rtl/ /cad/synopsys/syn/M-2016.12-SP2/libraries/syn/ ./lib/ ./lib/ ../params/
+###################
+# Read Design
+###################
+set file_list [list \
+    ./defines.sv \
+    ../logical/buffer.sv \
+    ../logical/controller.sv \
+    ../logical/instruction_memory.sv \
+    ../logical/processing_element.sv \
+    ../logical/top.sv \
+    ./macros/array.sv \
+]
+./defines.sv ../logical/buffer.sv ../logical/controller.sv ../logical/instruction_memory.sv ../logical/processing_element.sv ../logical/top.sv ./macros/array.sv
+analyze -library FreePDK_45nm -format sverilog $file_list
+Running PRESTO HDLC
+Compiling source file ./defines.sv
+Compiling source file ../logical/buffer.sv
+Opening include file defines.sv
+Compiling source file ../logical/controller.sv
+Opening include file defines.sv
+Compiling source file ../logical/instruction_memory.sv
+Compiling source file ../logical/processing_element.sv
+Opening include file defines.sv
+Compiling source file ../logical/top.sv
+Opening include file defines.sv
+Compiling source file ./macros/array.sv
+Presto compilation completed successfully.
+Loading db file '/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db'
+Information: Using CCS timing libraries. (TIM-024)
+Loading db file '/cad/synopsys/syn/S-2021.06-SP5-4/libraries/syn/dw_foundation.sldb'
+1
+elaborate ${DESIGN_TARGET} -architecture verilog -library FreePDK_45nm
+Loading db file '/cad/synopsys/syn/S-2021.06-SP5-4/libraries/syn/gtech.db'
+Loading db file '/cad/synopsys/syn/S-2021.06-SP5-4/libraries/syn/standard.sldb'
+  Loading link library 'NangateOpenCellLibrary'
+  Loading link library 'gtech'
+Running PRESTO HDLC
+
+Inferred memory devices in process
+	in routine top line 85 in file
+		'../logical/top.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   output_data_reg   | Flip-flop |  512  |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (top)
+Elaborated 1 design.
+Current design is now 'top'.
+Information: Building the design 'instruction_memory'. (HDL-193)
+
+Inferred memory devices in process
+	in routine instruction_memory line 39 in file
+		'../logical/instruction_memory.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+| program_counter_reg | Flip-flop |   7   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (instruction_memory)
+Information: Building the design 'controller'. (HDL-193)
+
+Statistics for case statements in always block at line 48 in file
+	'../logical/controller.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            67            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine controller line 48 in file
+		'../logical/controller.sv'.
+================================================================================
+|    Register Name     |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+================================================================================
+| inst_exec_begins_reg | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|      state_reg       | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    pe_inst_r_reg     | Flip-flop |   9   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    buf_inst_r_reg    | Flip-flop |  36   |  Y  | N  | Y  | N  | N  | N  | N  |
+|     count_r_reg      | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|   iter_count_r_reg   | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    mema_inc_r_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|    memb_inc_r_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+| pe_inst_valid_r_reg  | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+|  buf_inst_valid_reg  | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+================================================================================
+Presto compilation completed successfully. (controller)
+Information: Building the design 'buffer'. (HDL-193)
+
+Statistics for case statements in always block at line 22 in file
+	'../logical/buffer.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            26            |    user/user     |
+===============================================
+
+Inferred memory devices in process
+	in routine buffer line 110 in file
+		'../logical/buffer.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|    mode_reg_reg     | Flip-flop |   2   |  Y  | N  | Y  | N  | N  | N  | N  |
+|    rd_func_d_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
+| memb_offset_reg_reg | Flip-flop |  16   |  Y  | N  | Y  | N  | N  | N  | N  |
+|   matrix_data_reg   | Flip-flop |  512  |  Y  | N  | Y  | N  | N  | N  | N  |
+|   vector_data_reg   | Flip-flop |  32   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully. (buffer)
+Information: Building the design 'processing_element'. (HDL-193)
+Warning:  ../logical/processing_element.sv:53: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:54: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:55: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:59: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:71: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:72: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:73: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:77: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:88: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:89: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:112: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:118: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:123: signed to unsigned assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:136: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:142: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:147: unsigned to signed assignment occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:178: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:180: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:189: signed to unsigned part selection occurs. (VER-318)
+Warning:  ../logical/processing_element.sv:191: signed to unsigned part selection occurs. (VER-318)
+
+Statistics for case statements in always block at line 34 in file
+	'../logical/processing_element.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            39            |    auto/auto     |
+|            41            |    auto/auto     |
+|            44            |    auto/auto     |
+|           109            |    auto/auto     |
+|           133            |    auto/auto     |
+|           172            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine processing_element line 34 in file
+		'../logical/processing_element.sv'.
+===========================================================================
+|    Register Name    | Type  | Width | Bus | MB | AR | AS | SR | SS | ST |
+===========================================================================
+|    out_next_reg     | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+===========================================================================
+
+Inferred memory devices in process
+	in routine processing_element line 221 in file
+		'../logical/processing_element.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|     acc_reg_reg     | Flip-flop |  64   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Warning:  ../logical/processing_element.sv:34: Netlist for always_comb block contains a latch. (ELAB-974)
+Presto compilation completed successfully. (processing_element)
+Information: Building the design 'array' instantiated from design 'instruction_memory' with
+	the parameters "DW=63,NW=128,AW=7". (HDL-193)
+Presto compilation completed successfully. (array_DW63_NW128_AW7)
+Information: Building the design 'array' instantiated from design 'buffer' with
+	the parameters "DW=512,NW=65536,AW=16". (HDL-193)
+Presto compilation completed successfully. (array_DW512_NW65536_AW16)
+Information: Building the design 'array' instantiated from design 'buffer' with
+	the parameters "DW=32,NW=16384,AW=14". (HDL-193)
+Presto compilation completed successfully. (array_DW32_NW16384_AW14)
+Information: Building the design 'array' instantiated from design 'buffer' with
+	the parameters "DW=512,NW=65536,AW=16,INITIALIZE_MEMORY=1". (HDL-193)
+Presto compilation completed successfully. (array_DW512_NW65536_AW16_INITIALIZE_MEMORY1)
+Information: Building the design 'vector_decoder'. (HDL-193)
+
+Statistics for case statements in always block at line 95 in file
+	'./defines.sv'
+===============================================
+|           Line           |  full/ parallel  |
+===============================================
+|            96            |     no/auto      |
+|            99            |    auto/auto     |
+|           108            |    auto/auto     |
+===============================================
+
+Inferred memory devices in process
+	in routine vector_decoder line 95 in file
+		'./defines.sv'.
+===========================================================================
+|    Register Name    | Type  | Width | Bus | MB | AR | AS | SR | SS | ST |
+===========================================================================
+|   data_to_pe_reg    | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|   addr_to_mem_reg   | Latch |  14   |  Y  | N  | N  | N  | -  | -  | -  |
+===========================================================================
+Warning:  ./defines.sv:95: Netlist for always_comb block contains a latch. (ELAB-974)
+Presto compilation completed successfully. (vector_decoder)
+1
+link
+
+  Linking design 'top'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  NangateOpenCellLibrary (library) /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db
+  dw_foundation.sldb (library) /cad/synopsys/syn/S-2021.06-SP5-4/libraries/syn/dw_foundation.sldb
+
+1
+##################################
+# Constraints File
+##################################
+set CLK  "clk"
+clk
+set RST  "rst_n"
+rst_n
+create_clock $CLK -period $CLK_PERIOD
+1
+set_wire_load_model -name 1K_hvratio_1_4
+1
+set_wire_load_mode top
+1
+set_max_fanout 4.0 [get_ports "*" -filter {@port_direction != out} ]
+1
+set all_inputs_wo_rst_clk [remove_from_collection [remove_from_collection [all_inputs] [get_port $CLK]] [get_port $RST]]
+{instruction_count[6] instruction_count[5] instruction_count[4] instruction_count[3] instruction_count[2] instruction_count[1] instruction_count[0]}
+set_input_delay -clock $CLK [ expr $CLK_PERIOD*3/4 ] $all_inputs_wo_rst_clk
+1
+set_driving_cell -lib_cell "INV_X1" -pin "ZN" [ get_ports "*" -filter {@port_direction == in} ]
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[6]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[5]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[4]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[3]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[2]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[1]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'instruction_count[0]'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'clk'. (UID-401)
+Warning: Design rule attributes from the driving cell will be set on the port 'rst_n'. (UID-401)
+1
+set_input_delay -clock $CLK 0 instruction_count
+1
+set_max_area $TARGET_AREA
+1
+remove_driving_cell $RST
+1
+set_drive 0 $RST
+1
+set_dont_touch_network $RST
+1
+##########################################
+# Synthesize Design (Optimize for Timing)
+##########################################
+set_optimize_registers true -design ${DESIGN_TARGET}
+1
+compile_ultra -retime -timing_high_effort_script
+Warning: The -timing_high_effort_script option is ignored.  (OPT-1342)
+Information: Performing power optimization. (PWR-850)
+Alib files are up-to-date.
+Information: Running optimization using a maximum of 9 cores. (OPT-1500)
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library  |         Version         | Available |
+============================================================================
+| Basic DW Building Blocks           | S-2021.06-DWBB_202106.5 |     *     |
+| Licensed DW Building Blocks        | S-2021.06-DWBB_202106.5 |     *     |
+============================================================================
+
+============================================================================
+| Flow Information                                                         |
+----------------------------------------------------------------------------
+| Flow         | Design Compiler WLM                                       |
+============================================================================
+| Design Information                                      | Value          |
+============================================================================
+| Number of Scenarios                                     | 0              |
+| Leaf Cell Count                                         | 6108           |
+| Number of User Hierarchies                              | 20             |
+| Sequential Cell Count                                   | 2748           |
+| Macro Count                                             | 0              |
+| Number of Power Domains                                 | 0              |
+| Design with UPF Data                                    | false          |
+============================================================================
+Information: Sequential output inversion is enabled.  SVF file must be used for formal verification. (OPT-1208)
+Information: Retiming is enabled. SVF file must be used for formal verification. (OPT-1210)
+
+Information: There are 25 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+Information: Uniquified 16 instances of design 'processing_element'. (OPT-1056)
+  Simplifying Design 'top'
+Information: The register 'u_buffer/memb_offset_reg_reg[2]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[3]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[4]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[5]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[6]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[7]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[8]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[9]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[10]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[11]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[12]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[13]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[14]' will be removed. (OPT-1207)
+Information: The register 'u_buffer/memb_offset_reg_reg[15]' will be removed. (OPT-1207)
+
+Loaded alib file './alib-52/NangateOpenCellLibrary.db.alib'
+  Building model 'DW01_NAND2'
+Information: Ungrouping hierarchy u_instruction_memory before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy u_controller before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy u_buffer before Pass 1 (OPT-776)
+Information: Ungrouping hierarchy u_buffer/u_vector_decoder before Pass 1 (OPT-776)
+Information: Ungrouping 4 of 21 hierarchies before Pass 1 (OPT-775)
+Information: State dependent leakage is now switched from on to off.
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'top'
+Information: Added key list 'DesignWare' to design 'top'. (DDB-72)
+ Implement Synthetic for 'top'.
+  Processing 'processing_element_0'
+ Implement Synthetic for 'processing_element_0'.
+Information: Added key list 'DesignWare' to design 'processing_element_0'. (DDB-72)
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Mapping Optimizations  (Ultra High effort)
+  -------------------------------
+Information: Ungrouping hierarchy PE_ARRAY[0].u_pe 'processing_element_15' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[15].u_pe 'processing_element_0' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[14].u_pe 'processing_element_1' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[13].u_pe 'processing_element_2' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[12].u_pe 'processing_element_3' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[11].u_pe 'processing_element_4' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[10].u_pe 'processing_element_5' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[9].u_pe 'processing_element_6' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[8].u_pe 'processing_element_7' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[7].u_pe 'processing_element_8' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[6].u_pe 'processing_element_9' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[5].u_pe 'processing_element_10' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[4].u_pe 'processing_element_11' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[3].u_pe 'processing_element_12' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[2].u_pe 'processing_element_13' #insts = 1511. (OPT-777)
+Information: Ungrouping hierarchy PE_ARRAY[1].u_pe 'processing_element_14' #insts = 1511. (OPT-777)
+Information: Checking pipeline property of design top. (RTDC-137)
+Information: Pipeline detection aborted. Reason: cell PE_ARRAY[15].u_pe/acc_reg_reg[63] is on a feedback loop. (RTDC-138)
+Information: Aborted pipeline detection on design top. (RTDC-140)
+  Mapping Optimization (Phase 1)
+Information: Checkpoint guidance is generated in the .svf file. (INFO-122)
+Warning: Retiming is likely to run for an extended
+	period of time due to the large design size. (RTDC-135)
+  Retiming top (top)
+Warning: A black box cell u_buffer/u_matrix_mem is 	found on the clock tree.  (RTDC-103)
+Warning: A black box cell u_buffer/u_vector_mem is 	found on the clock tree.  (RTDC-103)
+Warning: A black box cell u_instruction_memory/u_instruction_memory is 	found on the clock tree.  (RTDC-103)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[31]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[30]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[29]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[28]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[27]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[26]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[25]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[24]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[23]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[22]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[21]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[20]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[19]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[18]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[17]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[16]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[15]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[14]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[13]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[12]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[11]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[10]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[9]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[8]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[7]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[6]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[5]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[4]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[3]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[2]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[1]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/data_to_pe_reg[0]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[13]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[12]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[11]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[10]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[9]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[8]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[7]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[6]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[5]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[4]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[3]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[2]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[1]'. (RTDC-5)
+Warning: No clock net driving clock pin of cell 'u_buffer/u_vector_decoder/addr_to_mem_reg[0]'. (RTDC-5)
+  Preferred flip-flop is DFFS_X1 with setup = 0.04
+
+Warning: Cell 'u_buffer/u_matrix_mem' has no timing information. Treating it 
+	like an external module. (RTDC-32)
+Warning: Cell 'u_buffer/u_vector_mem' has no timing information. Treating it 
+	like an external module. (RTDC-32)
+Warning: Cell 'u_instruction_memory/u_instruction_memory' has no timing information. Treating it 
+	like an external module. (RTDC-32)
+Warning: The following cells only drive
+	asynchronous pins of sequential cells which have no
+	timing constraint. Therefore retiming will not optimize
+	delay through them:
+	U202 (INV_X1)
+	PE_ARRAY[0].u_pe/U3 (INV_X1)
+	PE_ARRAY[15].u_pe/U3 (INV_X1)
+	PE_ARRAY[14].u_pe/U3 (INV_X1)
+	PE_ARRAY[13].u_pe/U3 (INV_X1)
+	PE_ARRAY[12].u_pe/U3 (INV_X1)
+	PE_ARRAY[11].u_pe/U3 (INV_X1)
+	PE_ARRAY[10].u_pe/U3 (INV_X1)
+	PE_ARRAY[9].u_pe/U3 (INV_X1)
+	PE_ARRAY[8].u_pe/U3 (INV_X1)
+	PE_ARRAY[7].u_pe/U3 (INV_X1)
+	PE_ARRAY[6].u_pe/U3 (INV_X1)
+	PE_ARRAY[5].u_pe/U3 (INV_X1)
+	PE_ARRAY[4].u_pe/U3 (INV_X1)
+	PE_ARRAY[3].u_pe/U3 (INV_X1)
+	PE_ARRAY[2].u_pe/U3 (INV_X1)
+	PE_ARRAY[1].u_pe/U3 (INV_X1)
+
+ (RTDC-115)
+
+  Retiming base-clock clk, rising edge.
+  Beginning minimum period retiming ...
+  ... minimum period retiming done.
+  Beginning minimum area retiming step 1 ...
+  ... minimum area retiming step 1 done.
+  Beginning minimum area retiming step 2 ...
+  5% 10% 15% 20% 25% 30% 35% 40% 45% 50% 55% 60% 65% 70% 75% 80% 85% 90% 95% 100% 
+  ... minimum area retiming step 2 done.
+  Beginning minimum area retiming step 3 ...
+  5% 10% 15% 20% 25% 30% 35% 40% 45% 50% ... 100% 
+  ... minimum area retiming step 3 done.
+  Beginning final register move ...
+  ... final register move done.
+  Beginning minimum period retiming ...
+  ... minimum period retiming done.
+  Beginning minimum area retiming step 1 ...
+  ... minimum area retiming step 1 done.
+  Beginning minimum area retiming step 2 ...
+  5% 10% 15% 20% 25% 30% 35% 40% 45% 50% 55% 60% 65% 70% 75% 80% 85% 90% 95% 100% 
+  ... minimum area retiming step 2 done.
+  Beginning minimum area retiming step 3 ...
+  10% 20% 30% 40% 50% 60% 70% 80% 90% ... 100% 
+  ... minimum area retiming step 3 done.
+  Beginning final register move ...
+  ... final register move done.
+Warning: QoR may not be optimal with medium justification effort. (RTDC-133)
+  Lower bound estimate = 2.25
+  Critical path length = 2.25
+  Clock correction = 0.13 (clock-to-Q delay = 0.09, setup = 0.04, uncertainty = 0.00)
+  Mapping Optimization (Phase 2)
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    1:27:11  349754.4      0.59    1413.0   16940.5 clk_r_REG6508_S1/D        11077340.0000
+    1:27:11  349754.4      0.59    1413.0   16940.5 clk_r_REG6508_S1/D        11077340.0000
+    1:28:31  347972.4      0.54    1234.9   14525.6 clk_r_REG4711_S1/D        10988165.0000
+    1:31:54  342119.4      0.44     923.1   11315.4 PE_ARRAY[7].u_pe/DP_OP_70J1_128_4705/clk_r_REG2905_S1/D 10717549.0000
+    1:35:58  335241.7      0.37     726.2    9514.3 clk_r_REG6580_S1/D        10421119.0000
+    1:38:12  330784.6      0.33     585.0    8490.2 clk_r_REG2478_S1/D        10226563.0000
+    1:40:13  327240.1      0.30     508.7    8047.2 clk_r_REG6682_S1/D        10076290.0000
+    1:41:45  324931.0      0.28     437.6    7452.6 clk_r_REG6448_S1/D        9976898.0000
+    1:43:23  322929.3      0.26     418.9    7113.3 clk_r_REG215_S1/D         9892659.0000
+    1:45:24  320557.4      0.24     387.0    6575.0 clk_r_REG6268_S1/D        9787725.0000
+    1:46:59  318839.6      0.22     311.8    6403.7 clk_r_REG4621_S1/D        9707786.0000
+    1:48:01  317448.4      0.21     293.8    6199.7 clk_r_REG2824_S1/D        9647953.0000
+    1:49:08  315786.4      0.20     255.2    6025.1 clk_r_REG4243_S1/D        9571539.0000
+    1:50:33  314520.8      0.19     224.8    5952.7 clk_r_REG6643_S1/D        9513213.0000
+    1:51:56  313559.7      0.18     205.3    5662.8 clk_r_REG2824_S1/D        9468122.0000
+    1:53:38  312672.4      0.17     177.9    5316.7 clk_r_REG5557_S1/D        9429398.0000
+    1:54:55  311753.9      0.16     164.2    5215.4 clk_r_REG4621_S1/D        9387650.0000
+    1:55:57  310955.6      0.15     154.3    4997.9 clk_r_REG6067_S1/D        9351984.0000
+    1:56:42  310509.8      0.14     148.0    4821.6 clk_r_REG6306_S1/D        9332188.0000
+    1:57:54  309591.8      0.13     132.1    4552.8 clk_r_REG36_S1/D          9288515.0000
+    1:58:55  308988.3      0.13     125.9    4284.8 clk_r_REG5568_S1/D        9259895.0000
+    2:00:03  308292.9      0.12     109.8    3938.5 clk_r_REG6437_S1/D        9230570.0000
+    2:01:11  307724.8      0.11     104.2    3847.2 PE_ARRAY[3].u_pe/DP_OP_70J1_128_4705/clk_r_REG6012_S1/D 9204875.0000
+    2:01:29  307563.3      0.11     102.2    3771.2                           9197341.0000
+    2:01:42  305633.2      3.12    1083.5   11908.5                           9135105.0000
+
+  Beginning Constant Register Removal
+  -----------------------------------
+    2:03:32  312807.8      3.00    5052.1    4094.1                           9519644.0000
+    2:03:44  312736.7      3.10    5454.2    4088.8                           9517746.0000
+
+  Beginning Global Optimizations
+  ------------------------------
+  Numerical Synthesis (Phase 1)
+  Numerical Synthesis (Phase 2)
+  Global Optimization (Phase 1)
+  Global Optimization (Phase 2)
+  Global Optimization (Phase 3)
+  Global Optimization (Phase 4)
+  Global Optimization (Phase 5)
+  Global Optimization (Phase 6)
+  Global Optimization (Phase 7)
+  Global Optimization (Phase 8)
+  Global Optimization (Phase 9)
+  Global Optimization (Phase 10)
+  Global Optimization (Phase 11)
+  Global Optimization (Phase 12)
+  Global Optimization (Phase 13)
+  Global Optimization (Phase 14)
+  Global Optimization (Phase 15)
+  Global Optimization (Phase 16)
+  Global Optimization (Phase 17)
+  Global Optimization (Phase 18)
+  Global Optimization (Phase 19)
+  Global Optimization (Phase 20)
+  Global Optimization (Phase 21)
+  Global Optimization (Phase 22)
+  Global Optimization (Phase 23)
+  Global Optimization (Phase 24)
+  Global Optimization (Phase 25)
+  Global Optimization (Phase 26)
+  Global Optimization (Phase 27)
+  Global Optimization (Phase 28)
+  Global Optimization (Phase 29)
+  Global Optimization (Phase 30)
+  Global Optimization (Phase 31)
+  Global Optimization (Phase 32)
+
+  Beginning Isolate Ports
+  -----------------------
+
+  Beginning Delay Optimization
+  ----------------------------
+    2:07:04  208143.7      1.18    3690.3    3203.0                           4577849.0000
+    2:08:13  208361.3      0.04       5.4    2735.2                           4570805.0000
+    2:08:13  208361.3      0.04       5.4    2735.2                           4570805.0000
+    2:08:23  208362.3      0.04       5.5    2735.2                           4570884.5000
+    2:09:20  208290.5      0.04       5.3    2735.2                           4569440.5000
+    2:09:32  207797.9      0.34      95.7    3058.9                           4557747.0000
+
+  Beginning WLM Backend Optimization
+  --------------------------------------
+    2:10:39  206808.9      0.34      93.3    3057.9                           4496438.0000
+    2:10:44  206363.9      0.34      86.8    3048.2                           4467502.0000
+    2:10:49  205920.2      0.34      83.9    3005.4                           4439184.0000
+    2:10:54  205449.1      0.34      79.5    2981.1                           4418357.5000
+    2:10:57  204855.6      0.34      74.3    2930.9                           4397706.5000
+    2:11:04  204092.5      0.34      74.7    2930.3                           4366894.5000
+    2:11:20  203072.6      0.34      64.9    2530.0                           4322935.0000
+    2:11:24  202151.2      0.27      16.1    2429.8                           4282632.5000
+    2:11:25  202153.6      0.14       9.8    2385.4                           4282712.0000
+    2:11:26  202153.6      0.14       9.8    2385.4                           4282712.0000
+    2:11:41  199279.5      0.14       6.6    2292.9                           4077325.7500
+    2:11:42  199279.5      0.14       6.6    2292.9                           4077325.7500
+    2:11:48  199941.8      0.04       2.7    2324.4                           4100871.7500
+    2:11:49  199941.8      0.04       2.7    2324.4                           4100871.7500
+    2:11:49  199946.6      0.04       2.3    2320.3                           4101086.2500
+    2:11:49  199946.6      0.04       2.3    2320.3                           4101086.2500
+    2:11:51  200115.0      0.03       1.7    2320.3                           4106849.7500
+    2:11:51  200115.0      0.03       1.7    2320.3                           4106849.7500
+    2:11:53  200329.4      0.01       0.1    2285.6                           4114754.5000
+    2:11:54  200329.4      0.01       0.1    2285.6                           4114754.5000
+    2:11:55  200460.0      0.00       0.0    2285.6                           4119314.0000
+    2:11:55  200460.0      0.00       0.0    2285.6                           4119314.0000
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+
+
+  Beginning Design Rule Fixing  (max_transition)  (max_fanout)  (max_capacitance)
+  ----------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    2:11:56  200472.0      0.00       0.0    2285.6                           4119805.2500
+  Global Optimization (Phase 33)
+  Global Optimization (Phase 34)
+  Global Optimization (Phase 35)
+    2:12:09  200538.7      0.00       0.0    1250.6 PE_ARRAY[3].u_pe/DP_OP_70J1_128_4705/net1082642 4121744.0000
+    2:12:11  200554.4      0.00       0.0     938.1                           4122675.5000
+    2:12:11  200554.4      0.00       0.0     938.1                           4122675.5000
+
+
+  Beginning Leakage Power Optimization  (max_leakage_power 0)
+  ------------------------------------
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    2:12:11  200554.4      0.00       0.0     938.1                           4122675.5000
+  Global Optimization (Phase 36)
+  Global Optimization (Phase 37)
+  Global Optimization (Phase 38)
+  Global Optimization (Phase 39)
+  Global Optimization (Phase 40)
+  Global Optimization (Phase 41)
+  Global Optimization (Phase 42)
+  Global Optimization (Phase 43)
+  Global Optimization (Phase 44)
+  Global Optimization (Phase 45)
+  Global Optimization (Phase 46)
+  Global Optimization (Phase 47)
+  Global Optimization (Phase 48)
+  Global Optimization (Phase 49)
+  Global Optimization (Phase 50)
+  Global Optimization (Phase 51)
+    2:13:01  199477.7      0.01       0.1    1115.5 clk_r_REG4650_S1/D        4090729.5000
+    2:13:03  199518.6      0.00       0.0    1055.3 clk_r_REG4400_S1/D        4092163.5000
+    2:13:03  199521.0      0.00       0.0    1055.3                           4092207.7500
+    2:13:03  199521.0      0.00       0.0    1055.3                           4092207.7500
+    2:13:04  199521.0      0.00       0.0    1055.3                           4092207.7500
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:14  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:15  199373.7      0.00       0.0    1055.3                           4083542.0000
+
+                                  TOTAL                                                
+   ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
+    TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
+  --------- --------- --------- --------- --------- ------------------------- ---------
+    2:13:19  199373.7      0.00       0.0    1055.3                           4083542.0000
+    2:13:37  198250.9      0.03       1.5    1051.8                           4026274.7500
+    2:13:40  198319.5      0.00       0.2    1024.6                           4029663.0000
+    2:13:41  198319.5      0.00       0.2    1024.6                           4029663.0000
+    2:13:51  198304.6      0.00       0.2    1002.8                           4028825.2500
+    2:13:54  198302.2      0.00       0.2     999.6                           4028776.7500
+    2:14:07  198239.4      0.00       0.2     996.3                           4026718.2500
+    2:14:14  198184.6      0.00       0.2     993.1                           4024192.7500
+    2:14:17  198194.2      0.00       0.2     756.1 PE_ARRAY[6].u_pe/DP_OP_70J1_128_4705/net1082358 4024807.2500
+    2:14:20  198212.3      0.00       0.1     735.6 clk_r_REG4663_S1/D        4025498.7500
+    2:14:22  198227.2      0.00       0.0     735.6 clk_r_REG4666_S1/D        4026054.7500
+    2:14:23  198239.7      0.00       0.0     734.2 clk_r_REG6603_S1/D        4026487.2500
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:26  198243.4      0.00       0.0     734.2                           4026581.5000
+    2:14:37  198130.1      0.00       0.0     760.1                           4020328.0000
+Loading db file '/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db'
+
+
+Note: Symbol # after min delay cost means estimated hold TNS across all active scenarios 
+
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'top' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'clk': 7454 load(s), 1 driver(s)
+Information: State dependent leakage is now switched from off to on.
+Information: Propagating switching activity (low effort zero delay simulation). (PWR-6)
+Warning: Design has unannotated black box outputs. (PWR-428)
+1
+##########################
+# Generate Reports 
+##########################
+redirect "reports/design_report" { report_design }
+check_design
+ 
+****************************************
+check_design summary:
+Version:     S-2021.06-SP5-4
+Date:        Tue Nov 25 13:18:49 2025
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Designs                                                             4
+    Design has no outputs ports (LINT-25)                           1
+    Black box (LINT-55)                                             3
+--------------------------------------------------------------------------------
+
+Warning: Design 'top' does not have any output ports. (LINT-25)
+Information: Design 'array_DW512_NW65536_AW16' does not contain any cells or nets. (LINT-55)
+Information: Design 'array_DW32_NW16384_AW14' does not contain any cells or nets. (LINT-55)
+Information: Design 'array_DW63_NW128_AW7' does not contain any cells or nets. (LINT-55)
+1
+redirect "reports/design_check" {check_design }
+report_area 
+ 
+****************************************
+Report : area
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:18:50 2025
+****************************************
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+
+Number of ports:                            9
+Number of nets:                        122668
+Number of cells:                       109242
+Number of combinational cells:         101740
+Number of sequential cells:              7500
+Number of macros/black boxes:               0
+Number of buf/inv:                      11137
+Number of references:                      76
+
+Combinational area:             158079.810293
+Buf/Inv area:                     6612.494016
+Noncombinational area:           40050.291275
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                198130.101567
+Total area:                 undefined
+1
+redirect "reports/area_report" { report_area }
+report_area -hierarchy
+ 
+****************************************
+Report : area
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:18:50 2025
+****************************************
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+
+Number of ports:                            9
+Number of nets:                        122668
+Number of cells:                       109242
+Number of combinational cells:         101740
+Number of sequential cells:              7500
+Number of macros/black boxes:               0
+Number of buf/inv:                      11137
+Number of references:                      76
+
+Combinational area:             158079.810293
+Buf/Inv area:                     6612.494016
+Noncombinational area:           40050.291275
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (Wire load has zero net area)
+
+Total cell area:                198130.101567
+Total area:                 undefined
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area              Local cell area
+                                  --------------------  ------------------------------- 
+Hierarchical cell                 Absolute     Percent  Combi-       Noncombi-   Black-
+                                  Total        Total    national     national    boxes   Design
+--------------------------------  -----------  -------  -----------  ----------  ------  ---------
+top                               198130.1016    100.0  158079.8103  40050.2913  0.0000  top
+--------------------------------  -----------  -------  -----------  ----------  ------  ---------
+Total                                                   158079.8103  40050.2913  0.0000
+
+1
+redirect "reports/area_report_hier" { report_area -hierarchy }
+report_power
+ 
+****************************************
+Report : power
+        -analysis_effort low
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:18:52 2025
+****************************************
+
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+top                    1K_hvratio_1_4    NangateOpenCellLibrary
+
+
+Global Operating Voltage = 1.1  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000ff
+    Time Units = 1ns
+    Dynamic Power Units = 1uW    (derived from V,C,T units)
+    Leakage Power Units = 1nW
+
+
+  Cell Internal Power  =  30.1599 mW   (83%)
+  Net Switching Power  =   6.1530 mW   (17%)
+                         ---------
+Total Dynamic Power    =  36.3128 mW  (100%)
+
+Cell Leakage Power     =   3.8933 mW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000           80.7901            0.0000           80.7901  (   0.20%)
+clock_network    147.2755           97.0364        7.8021e+04          322.3358  (   0.80%)
+register       2.6604e+04          944.2278        6.2950e+05        2.8178e+04  (  70.08%)
+sequential         1.2967        5.6445e-02          559.1671            1.9123  (   0.00%)
+combinational  3.4068e+03        5.0305e+03        3.1852e+06        1.1623e+04  (  28.91%)
+--------------------------------------------------------------------------------------------------
+Total          3.0160e+04 uW     6.1526e+03 uW     3.8933e+06 nW     4.0206e+04 uW
+1
+redirect "reports/power_report" { report_power -analysis_effort hi }
+report_timing
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:19:50 2025
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: clk_r_REG1353_S1
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: clk_r_REG4483_S1
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  top                1K_hvratio_1_4        NangateOpenCellLibrary
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clk_r_REG1353_S1/CK (DFFS_X2)                           0.00 #     0.00 r
+  clk_r_REG1353_S1/Q (DFFS_X2)                            0.16       0.16 r
+  U22520/Z (BUF_X2)                                       0.16       0.32 r
+  U69527/ZN (AOI22_X1)                                    0.08       0.40 f
+  U69529/ZN (AOI21_X1)                                    0.06       0.47 r
+  U69543/S (FA_X1)                                        0.12       0.59 f
+  U69544/ZN (INV_X1)                                      0.04       0.63 r
+  U69545/ZN (AND2_X1)                                     0.04       0.67 r
+  U69549/ZN (NOR2_X1)                                     0.02       0.69 f
+  U89712/CO (FA_X1)                                       0.11       0.80 f
+  U69552/ZN (AOI21_X1)                                    0.05       0.85 r
+  U69553/ZN (INV_X1)                                      0.02       0.87 f
+  U69554/ZN (AND2_X1)                                     0.04       0.91 f
+  PE_ARRAY[6].u_pe/intadd_230/U2/CO (FA_X1)               0.10       1.01 f
+  U69518/ZN (AOI21_X1)                                    0.05       1.06 r
+  U69519/ZN (INV_X1)                                      0.02       1.08 f
+  U870/ZN (AND2_X1)                                       0.04       1.12 f
+  U3407/ZN (NAND2_X1)                                     0.03       1.15 r
+  U69522/ZN (NAND3_X1)                                    0.04       1.20 f
+  U69524/ZN (AOI21_X1)                                    0.05       1.25 r
+  U69525/ZN (INV_X1)                                      0.02       1.27 f
+  U2334/ZN (AND2_X1)                                      0.04       1.31 f
+  PE_ARRAY[6].u_pe/intadd_212/U2/CO (FA_X1)               0.11       1.41 f
+  U71525/ZN (NAND2_X1)                                    0.03       1.44 r
+  U830/ZN (AND3_X1)                                       0.07       1.51 r
+  U3404/ZN (NAND2_X1)                                     0.03       1.54 f
+  U71529/ZN (NAND3_X1)                                    0.03       1.57 r
+  U71530/ZN (INV_X1)                                      0.03       1.60 f
+  U71531/ZN (NAND2_X1)                                    0.03       1.63 r
+  U812/ZN (AND3_X1)                                       0.06       1.69 r
+  U71538/ZN (NAND2_X1)                                    0.03       1.72 f
+  U71540/ZN (NAND3_X1)                                    0.03       1.75 r
+  U71542/ZN (XNOR2_X1)                                    0.06       1.81 r
+  U7414/ZN (OR2_X1)                                       0.04       1.85 r
+  U71544/ZN (NAND2_X1)                                    0.03       1.87 f
+  U3409/ZN (NAND2_X1)                                     0.02       1.90 r
+  U3408/ZN (NAND3_X1)                                     0.03       1.93 f
+  U71545/ZN (NAND2_X1)                                    0.03       1.96 r
+  clk_r_REG4483_S1/D (DFFS_X1)                            0.01       1.97 r
+  data arrival time                                                  1.97
+
+  clock clk (rise edge)                                   2.00       2.00
+  clock network delay (ideal)                             0.00       2.00
+  clk_r_REG4483_S1/CK (DFFS_X1)                           0.00       2.00 r
+  library setup time                                     -0.03       1.97
+  data required time                                                 1.97
+  --------------------------------------------------------------------------
+  data required time                                                 1.97
+  data arrival time                                                 -1.97
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1
+redirect "reports/timing_report_maxsm" { report_timing -significant_digits 4 }
+report_qor
+ 
+****************************************
+Report : qor
+Design : top
+Version: S-2021.06-SP5-4
+Date   : Tue Nov 25 13:19:50 2025
+****************************************
+
+
+  Timing Path Group 'clk'
+  -----------------------------------
+  Levels of Logic:              36.00
+  Critical Path Length:          1.97
+  Critical Path Slack:           0.00
+  Critical Path Clk Period:      2.00
+  Total Negative Slack:          0.00
+  No. of Violating Paths:        0.00
+  Worst Hold Violation:          0.00
+  Total Hold Violation:          0.00
+  No. of Hold Violations:        0.00
+  -----------------------------------
+
+
+  Cell Count
+  -----------------------------------
+  Hierarchical Cell Count:          0
+  Hierarchical Port Count:          0
+  Leaf Cell Count:             109240
+  Buf/Inv Cell Count:           11137
+  Buf Cell Count:                1507
+  Inv Cell Count:                9630
+  CT Buf/Inv Cell Count:            0
+  Combinational Cell Count:    101743
+  Sequential Cell Count:         7497
+  Macro Count:                      0
+  -----------------------------------
+
+
+  Area
+  -----------------------------------
+  Combinational Area:   158079.810293
+  Noncombinational Area: 40050.291275
+  Buf/Inv Area:           6612.494016
+  Total Buffer Area:          1324.68
+  Total Inverter Area:        5287.81
+  Macro/Black Box Area:      0.000000
+  Net Area:                  0.000000
+  -----------------------------------
+  Cell Area:            198130.101567
+  Design Area:          198130.101567
+
+
+  Design Rules
+  -----------------------------------
+  Total Number of Nets:        122668
+  Nets With Violations:           120
+  Max Trans Violations:             0
+  Max Cap Violations:             119
+  Max Fanout Violations:            1
+  -----------------------------------
+
+
+  Hostname: caddy11.stanford.edu
+
+  Compile CPU Statistics
+  -----------------------------------------
+  Resource Sharing:                17198.11
+  Logic Optimization:                717.94
+  Mapping Optimization:             2411.92
+  -----------------------------------------
+  Overall Compile Time:            20893.40
+  Overall Compile Wall Clock Time:  8105.54
+
+  --------------------------------------------------------------------
+
+  Design  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+
+  Design (Hold)  WNS: 0.00  TNS: 0.00  Number of Violating Paths: 0
+
+  --------------------------------------------------------------------
+
+
+1
+redirect "reports/qor_report" { report_qor }
+check_error
+0
+redirect "reports/error_checking_report" { check_error }
+###################################
+# Save the Design DataBase
+###################################
+write -format verilog -hierarchy -output "netlist/top.mapped.v"
+Writing verilog file '/home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/netlist/top.mapped.v'.
+1
+#Concise Results in a singular file
+echo $CLK_PERIOD >> results.txt
+sh cat reports/error_checking_report >> results.txt
+sh grep -i slack reports/timing_report_maxsm >> results.txt
+sh cat reports/power_report | grep Total >> results.txt
+sh cat reports/power_report | grep Cell | grep Leakage >> results.txt
+sh cat reports/area_report | grep Total | grep cell >> results.txt
+exit 
+
+Memory usage for this session 6311 Mbytes.
+Memory usage for this session including child processes 6311 Mbytes.
+CPU usage for this session 20977 seconds ( 5.83 hours ).
+Elapsed time for this session 8195 seconds ( 2.28 hours ).
+
+Thank you...
