@@ -36,16 +36,16 @@ int8_test:
 	cd $(SOFTWARE_DIR) && $(MG) 1024 1024 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 1024 1 -5 5 --out $(VECTOR) --seed 12345
 	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT8 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count) --controller_imem_depth 256
 	
 	@# Compiling Hardware
-	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
+	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count) --controller_imem_depth 256
 	sed 's/VERILOG_DIR/$(VERILOG_DIR)/g' ./testbench/tb_top.f > ./testbench/tb_top_tmp.f
 	$(VCS) $(VCS_FLAGS) -f ./testbench/tb_top_tmp.f -top tb_top
 	rm ./testbench/tb_top_tmp.f
 
 	@# Running Software Sim
-	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG)
+	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG) --pe_count $(pe_count)
 
 	@# Running Hardware Sim
 	export num_insts=$$( echo $$(( $$(wc -l < ./software/mat_mul.asm) + 1 )) ); \
@@ -60,8 +60,8 @@ int16_test:
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 512 512 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 512   1 -5 5 --out $(VECTOR) --seed 12345
-	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT16 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT16 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count) --controller_imem_depth 256
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count) --controller_imem_depth 256
 
 	@# Compiling Hardware
 	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
@@ -70,7 +70,7 @@ int16_test:
 	rm ./testbench/tb_top_tmp.f
 
 	@# Running Software Sim
-	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG)
+	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG) --pe_count $(pe_count)
 
 	@# Running Hardware Sim
 	export num_insts=$$( echo $$(( $$(wc -l < ./software/mat_mul.asm) + 1 )) ); \
@@ -85,17 +85,17 @@ int32_test:
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 256 256 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 256   1 -5 5 --out $(VECTOR) --seed 12345
-	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT32 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT32 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count) --controller_imem_depth 256
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count) --controller_imem_depth 256
 
 	@# Compiling Hardware
-	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
+	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count) --controller_imem_depth 256
 	sed 's/VERILOG_DIR/$(VERILOG_DIR)/g' ./testbench/tb_top.f > ./testbench/tb_top_tmp.f
 	$(VCS) $(VCS_FLAGS) -f ./testbench/tb_top_tmp.f -top tb_top
 	rm ./testbench/tb_top_tmp.f
 
 	@# Running Software Sim
-	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG)
+	$(SIM) --instruction_bits ./$(SOFTWARE_DIR)/$(INSTRUCTIONS) --mem0_bits ./$(SOFTWARE_DIR)/$(MEM0_CONFIG) --mem1_bits ./$(SOFTWARE_DIR)/$(MEM1_CONFIG) --pe_count $(pe_count)
 
 	@# Running Hardware Sim
 	export num_insts=$$( echo $$(( $$(wc -l < ./software/mat_mul.asm) + 1 )) ); \
