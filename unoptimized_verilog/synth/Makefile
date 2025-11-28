@@ -3,8 +3,8 @@
 VG=ivd-gv
 
 # Parameters to Run Synthesis With
-CLK_PERIOD=2.000;   # Target Clock Period (ns)
-TARGET_AREA=150000; # Target Area (um^2)
+CLK_PERIOD=5.000;   # Target Clock Period (ns)
+TARGET_AREA=100000; # Target Area (um^2)
 DESIGN_TARGET=top;  # Design Name
 
 SET_SYNTH_PARAMS = 	\
@@ -18,7 +18,7 @@ DC_COMMAND_STRING = "$(SET_SYNTH_PARAMS) source -echo -verbose dc_synth.tcl"
 
 synthesize:
 	@# Generating defines.sv
-	$(VG) --out defines.sv
+	$(VG) --out defines.sv --pe_count $(pe_count) --controller_imem_depth 256
 	dc_shell-t -64bit -x $(DC_COMMAND_STRING) 2>&1 | tee -i compile.log
 
 clean:
