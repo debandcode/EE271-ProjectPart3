@@ -35,11 +35,11 @@ int8_test:
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 1024 1024 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 1024 1 -5 5 --out $(VECTOR) --seed 12345
-	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT8 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS)
-
+	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT8 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
+	
 	@# Compiling Hardware
-	$(VG) --out ./testbench/defines.sv
+	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
 	sed 's/VERILOG_DIR/$(VERILOG_DIR)/g' ./testbench/tb_top.f > ./testbench/tb_top_tmp.f
 	$(VCS) $(VCS_FLAGS) -f ./testbench/tb_top_tmp.f -top tb_top
 	rm ./testbench/tb_top_tmp.f
@@ -60,11 +60,11 @@ int16_test:
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 512 512 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 512   1 -5 5 --out $(VECTOR) --seed 12345
-	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT16 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS)
+	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT16 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
 
 	@# Compiling Hardware
-	$(VG) --out ./testbench/defines.sv
+	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
 	sed 's/VERILOG_DIR/$(VERILOG_DIR)/g' ./testbench/tb_top.f > ./testbench/tb_top_tmp.f
 	$(VCS) $(VCS_FLAGS) -f ./testbench/tb_top_tmp.f -top tb_top
 	rm ./testbench/tb_top_tmp.f
@@ -85,11 +85,11 @@ int32_test:
 	mkdir -p $(SOFTWARE_DIR)
 	cd $(SOFTWARE_DIR) && $(MG) 256 256 -5 5 --out $(MATRIX) --seed     0
 	cd $(SOFTWARE_DIR) && $(MG) 256   1 -5 5 --out $(VECTOR) --seed 12345
-	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT32 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE)
-	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS)
+	cd $(SOFTWARE_DIR) && $(CC) $(MATRIX) $(VECTOR) INT32 --out_mem0 $(MEM0_CONFIG) --out_mem1 $(MEM1_CONFIG) --out_asm $(ASM_FILE) --pe_count $(pe_count)
+	cd $(SOFTWARE_DIR) && $(AS) $(ASM_FILE) --out $(INSTRUCTIONS) --pe_count $(pe_count)
 
 	@# Compiling Hardware
-	$(VG) --out ./testbench/defines.sv
+	$(VG) --out ./testbench/defines.sv --pe_count $(pe_count)
 	sed 's/VERILOG_DIR/$(VERILOG_DIR)/g' ./testbench/tb_top.f > ./testbench/tb_top_tmp.f
 	$(VCS) $(VCS_FLAGS) -f ./testbench/tb_top_tmp.f -top tb_top
 	rm ./testbench/tb_top_tmp.f
