@@ -1,18 +1,17 @@
 Information: Updating design information... (UID-85)
-Warning: Design 'top' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
  
 ****************************************
 Report : design
 Design : top
 Version: S-2021.06-SP5-4
-Date   : Tue Nov 25 13:18:49 2025
+Date   : Sat Nov 29 00:34:52 2025
 ****************************************
 
 Design allows ideal nets on clock nets.
 
 Library(s) Used:
 
-    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart3/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
 
 Local Link Library:
 

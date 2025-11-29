@@ -8,13 +8,13 @@ Report : power
         -analysis_effort high
 Design : top
 Version: S-2021.06-SP5-4
-Date   : Tue Nov 25 13:19:47 2025
+Date   : Sat Nov 29 00:35:42 2025
 ****************************************
 
 
 Library(s) Used:
 
-    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart3/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
 
 
 Operating Conditions: typical   Library: NangateOpenCellLibrary
@@ -34,12 +34,12 @@ Power-specific unit information :
     Leakage Power Units = 1nW
 
 
-  Cell Internal Power  =  32.6180 mW   (81%)
-  Net Switching Power  =   7.4832 mW   (19%)
+  Cell Internal Power  =  11.3564 mW   (57%)
+  Net Switching Power  =   8.4423 mW   (43%)
                          ---------
-Total Dynamic Power    =  40.1012 mW  (100%)
+Total Dynamic Power    =  19.7987 mW  (100%)
 
-Cell Leakage Power     =   3.8969 mW
+Cell Leakage Power     =   3.1297 mW
 
 
                  Internal         Switching           Leakage            Total
@@ -47,11 +47,11 @@ Power Group      Power            Power               Power              Power  
 --------------------------------------------------------------------------------------------------
 io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
-black_box          0.0000           80.7901            0.0000           80.7901  (   0.18%)
-clock_network    386.2195          152.8936        7.7687e+04          616.7970  (   1.40%)
-register       2.7149e+04          947.2830        6.3001e+05        2.8727e+04  (  65.29%)
-sequential         1.2510        5.7699e-02          559.3773            1.8681  (   0.00%)
-combinational  5.0810e+03        6.3021e+03        3.1886e+06        1.4572e+04  (  33.12%)
+black_box          0.0000           80.6540            0.0000           80.6540  (   0.35%)
+clock_network    197.5210          748.9453        4.2218e+05        1.3686e+03  (   5.97%)
+register       3.8159e+03          420.3148        3.2072e+05        4.5569e+03  (  19.87%)
+sequential         2.7885            0.1033          557.3839            3.4492  (   0.02%)
+combinational  7.3401e+03        7.1922e+03        2.3863e+06        1.6919e+04  (  73.79%)
 --------------------------------------------------------------------------------------------------
-Total          3.2618e+04 uW     7.4831e+03 uW     3.8969e+06 nW     4.3998e+04 uW
+Total          1.1356e+04 uW     8.4422e+03 uW     3.1297e+06 nW     2.2928e+04 uW
 1

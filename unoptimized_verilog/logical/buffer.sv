@@ -1,4 +1,5 @@
-`include "defines.sv"
+// `include "defines.sv"
+`include "../synth/defines.sv"  
 
 module buffer (
     // Clock and Reset

@@ -3,8 +3,8 @@
 VG=ivd-gv
 
 # Parameters to Run Synthesis With
-CLK_PERIOD=5.000;   # Target Clock Period (ns)
-TARGET_AREA=100000; # Target Area (um^2)
+CLK_PERIOD=1.5000;   # Target Clock Period (ns)
+TARGET_AREA=150000; # Target Area (um^2)
 DESIGN_TARGET=top;  # Design Name
 
 SET_SYNTH_PARAMS = 	\

@@ -2,17 +2,17 @@
 `define ACCEL_DEFINES_H
 
 //Top Level Parameters
-`define PE_COUNT 16
+`define PE_COUNT 14
 `define CONTROLLER_COUNTER_BITWIDTH 16
 
 // Buffer Parameters
-`define MEM0_BITWIDTH   512
+`define MEM0_BITWIDTH   448
 `define MEM0_DEPTH      65536
 `define MEM0_ADDR_WIDTH 16
 `define MEM1_BITWIDTH   32
 `define MEM1_DEPTH      16384
 `define MEM1_ADDR_WIDTH 14
-`define MEM2_BITWIDTH   512
+`define MEM2_BITWIDTH   448
 `define MEM2_DEPTH      65536
 `define MEM2_ADDR_WIDTH 16
 
@@ -58,8 +58,8 @@
 `define CONTROLLER_MEMA_INC_BITWIDTH 1
 `define CONTROLLER_MEMB_INC_BITWIDTH 1
 `define FULL_INSTRUCTION_BITWIDTH    63
-`define IMEM_DEPTH                   128
-`define IMEM_ADDR_WIDTH              7
+`define IMEM_DEPTH                   256
+`define IMEM_ADDR_WIDTH              8
 
 // Helpful Structs for Packing Instructions
 typedef struct packed {

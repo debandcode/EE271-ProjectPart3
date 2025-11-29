@@ -65,11 +65,11 @@ set_dont_touch_network $RST
 ##########################################
 # Synthesize Design (Optimize for Timing)
 ##########################################
-set_clock_gating_style
-    -positive_edge
-    -control_point before
-    -max_fanout 32
-    -min_gating_ratio 3
+set_clock_gating_style \
+    -positive_edge_logic {integrated} \
+    -sequential_cell latch \
+    -minimum_bitwidth 4
+
 set_optimize_registers true -design ${DESIGN_TARGET}
 compile_ultra -retime -gate_clock -timing_high_effort_script
 

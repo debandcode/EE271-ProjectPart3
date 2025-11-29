@@ -1,4 +1,4 @@
-
+`include "../synth/defines.sv"  
 module instruction_memory(
 
     // Clock and Reset

@@ -3,29 +3,29 @@
 Report : area
 Design : top
 Version: S-2021.06-SP5-4
-Date   : Tue Nov 25 13:18:52 2025
+Date   : Sat Nov 29 00:34:55 2025
 ****************************************
 
 Library(s) Used:
 
-    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart2/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
+    NangateOpenCellLibrary (File: /home/users/shern/Documents/EE271/Project/EE271-ProjectPart3/unoptimized_verilog/synth/lib/NangateOpenCellLibrary.db)
 
-Number of ports:                            9
-Number of nets:                        122668
-Number of cells:                       109242
-Number of combinational cells:         101740
-Number of sequential cells:              7500
+Number of ports:                         1575
+Number of nets:                        101114
+Number of cells:                        87431
+Number of combinational cells:          83517
+Number of sequential cells:              3881
 Number of macros/black boxes:               0
-Number of buf/inv:                      11137
-Number of references:                      76
+Number of buf/inv:                      10892
+Number of references:                      47
 
-Combinational area:             158079.810293
-Buf/Inv area:                     6612.494016
-Noncombinational area:           40050.291275
+Combinational area:             124856.144321
+Buf/Inv area:                     6622.602014
+Noncombinational area:           20550.628652
 Macro/Black Box area:                0.000000
 Net Interconnect area:      undefined  (Wire load has zero net area)
 
-Total cell area:                198130.101567
+Total cell area:                145406.772973
 Total area:                 undefined
 
 Hierarchical area distribution
@@ -35,9 +35,71 @@ Hierarchical area distribution
                                   --------------------  ------------------------------- 
 Hierarchical cell                 Absolute     Percent  Combi-       Noncombi-   Black-
                                   Total        Total    national     national    boxes   Design
---------------------------------  -----------  -------  -----------  ----------  ------  ---------
-top                               198130.1016    100.0  158079.8103  40050.2913  0.0000  top
---------------------------------  -----------  -------  -----------  ----------  ------  ---------
-Total                                                   158079.8103  40050.2913  0.0000
+--------------------------------  -----------  -------  -----------  ----------  ------  --------------------------------------------
+top                               145406.7730    100.0     471.0860    831.5160  0.0000  top
+pe_generate_loop[0].u_processing_element
+                                   10471.3561      7.2    9017.9320   1449.9660  0.0000  processing_element_13
+pe_generate_loop[0].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_26
+pe_generate_loop[10].u_processing_element
+                                   10075.0161      6.9    8976.7020   1094.8560  0.0000  processing_element_3
+pe_generate_loop[10].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_6
+pe_generate_loop[11].u_processing_element
+                                   10897.2221      7.5    9042.4040   1851.3601  0.0000  processing_element_2
+pe_generate_loop[11].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_4
+pe_generate_loop[12].u_processing_element
+                                   10315.2141      7.1    8632.2320   1679.5241  0.0000  processing_element_1
+pe_generate_loop[12].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_2
+pe_generate_loop[13].u_processing_element
+                                   10026.3381      6.9    8878.0160   1144.8640  0.0000  processing_element_0
+pe_generate_loop[13].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_1
+pe_generate_loop[1].u_processing_element
+                                   10252.7041      7.1    8670.0040   1579.2421  0.0000  processing_element_12
+pe_generate_loop[1].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_24
+pe_generate_loop[2].u_processing_element
+                                   10749.0601      7.4    8895.3060   1850.2961  0.0000  processing_element_11
+pe_generate_loop[2].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_22
+pe_generate_loop[3].u_processing_element
+                                   10214.6661      7.0    9014.7400   1196.4680  0.0000  processing_element_10
+pe_generate_loop[3].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_20
+pe_generate_loop[4].u_processing_element
+                                   10026.8701      6.9    8945.3140   1078.0980  0.0000  processing_element_9
+pe_generate_loop[4].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_18
+pe_generate_loop[5].u_processing_element
+                                   10241.7981      7.0    8973.5100   1264.8300  0.0000  processing_element_8
+pe_generate_loop[5].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_16
+pe_generate_loop[6].u_processing_element
+                                   10233.5521      7.0    8831.4660   1398.6280  0.0000  processing_element_7
+pe_generate_loop[6].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_14
+pe_generate_loop[7].u_processing_element
+                                    9986.4381      6.9    8916.5860   1066.3940  0.0000  processing_element_6
+pe_generate_loop[7].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_12
+pe_generate_loop[8].u_processing_element
+                                   10319.4701      7.1    8764.7000   1551.3120  0.0000  processing_element_5
+pe_generate_loop[8].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_10
+pe_generate_loop[9].u_processing_element
+                                   10284.0921      7.1    8826.1460   1454.4880  0.0000  processing_element_4
+pe_generate_loop[9].u_processing_element/clk_gate_accumulation_register_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_processing_element_0_8
+u_controller/clk_gate_inst_internal_reg[buf_instruction][opcode]
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_controller_0
+u_controller/clk_gate_pe_inst_reg[opcode]
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_controller_2
+u_instruction_memory/clk_gate_program_counter_reg
+                                       3.4580      0.0       0.0000      3.4580  0.0000  SNPS_CLOCK_GATE_HIGH_instruction_memory
+--------------------------------  -----------  -------  -----------  ----------  ------  --------------------------------------------
+Total                                                   124856.1443  20550.6287  0.0000
 
 1

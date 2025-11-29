@@ -1,4 +1,5 @@
-`include "defines.sv"
+// `include "defines.sv"
+`include "../synth/defines.sv"  
 `define FF(out, in) always @(posedge clk, negedge rst_n) out <= (rst_n == '0) ? '0 : in;
 
 // // Handling "MAC" Instruction
@@ -38,22 +39,22 @@ localparam int VEC_W = `PE_INPUT_BITWIDTH;
     endcase
 
 
-`define HANDLE_MAC(acc_reg,mode)  \
-    case(mode) \
-        `MODE_INT8: begin \ 
-            accumulation_register[15:0]   <= signed'(accumulation_register[15:0])   + {{8{mul8_0_p[7]}}, mul8_0_p}; \
-            accumulation_register[31:16]  <= signed'(accumulation_register[31:16])  + {{8{mul8_1_p[7]}}, mul8_1_p}; \
-            accumulation_register[47:32]  <= signed'(accumulation_register[47:32])  + mul16_p[15:0]; \ 
-            accumulation_register[63:48]  <= signed'(accumulation_register[63:48])  + mul32_p[15:0]; \
-        end\
-        `MODE_INT16: begin \
-            accumulation_register[31:0] <= signed'(accumulation_register[31:0]) + mul16_p; \
-            accumulation_register[63:32] <= signed'(accumulation_register[63:32]) + mul32_p[31:0]; \
-        end\
-        `MODE_INT32: begin \
-            accumulation_register[63:0] <= signed'(accumulation_register[63:0]) + mul32_p; \
-        end\
-    endcase;
+// `define HANDLE_MAC(acc_reg,mode)  \
+//     case(mode) \
+//         `MODE_INT8: begin \ 
+//             accumulation_register[15:0]   <= signed'(accumulation_register[15:0])   + {{8{mul8_0_p[7]}}, mul8_0_p}; \
+//             accumulation_register[31:16]  <= signed'(accumulation_register[31:16])  + {{8{mul8_1_p[7]}}, mul8_1_p}; \
+//             accumulation_register[47:32]  <= signed'(accumulation_register[47:32])  + mul16_p[15:0]; \ 
+//             accumulation_register[63:48]  <= signed'(accumulation_register[63:48])  + mul32_p[15:0]; \
+//         end\
+//         `MODE_INT16: begin \
+//             accumulation_register[31:0] <= signed'(accumulation_register[31:0]) + mul16_p; \
+//             accumulation_register[63:32] <= signed'(accumulation_register[63:32]) + mul32_p[31:0]; \
+//         end\
+//         `MODE_INT32: begin \
+//             accumulation_register[63:0] <= signed'(accumulation_register[63:0]) + mul32_p; \
+//         end\
+//     endcase;
 
 
 
@@ -164,7 +165,21 @@ module processing_element(
                 if(pe_inst.opcode == '0) begin
                     case(pe_inst.value)
                         `PE_MAC_VALUE:  begin
-                            `HANDLE_MAC(accumulation_register, pe_inst.mode)
+                                case(pe_inst_reg.mode) 
+                                    `MODE_INT8: begin 
+                                        accumulation_register[15:0]   <= signed'(accumulation_register[15:0])   + {{8{mul8_0_p[7]}}, mul8_0_p};
+                                        accumulation_register[31:16]  <= signed'(accumulation_register[31:16])  + {{8{mul8_1_p[7]}}, mul8_1_p}; 
+                                        accumulation_register[47:32]  <= signed'(accumulation_register[47:32])  + mul16_p[15:0]; 
+                                        accumulation_register[63:48]  <= signed'(accumulation_register[63:48])  + mul32_p[15:0]; 
+                                    end
+                                    `MODE_INT16: begin 
+                                        accumulation_register[31:0] <= signed'(accumulation_register[31:0]) + mul16_p; 
+                                        accumulation_register[63:32] <= signed'(accumulation_register[63:32]) + mul32_p[31:0];
+                                    end
+                                    `MODE_INT32: begin 
+                                        accumulation_register[63:0] <= signed'(accumulation_register[63:0]) + mul32_p; 
+                                    end
+                                endcase;
                         end
                         `PE_OUT_VALUE:  begin
                             `HANDLE_OUT(vector_output, accumulation_register, pe_inst.mode)
