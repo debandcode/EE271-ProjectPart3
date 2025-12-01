@@ -167,8 +167,8 @@ module processing_element(
                         `PE_MAC_VALUE:  begin
                                 case(pe_inst_reg.mode) 
                                     `MODE_INT8: begin 
-                                        accumulation_register[15:0]   <= signed'(accumulation_register[15:0])   + {{8{mul8_0_p[7]}}, mul8_0_p};
-                                        accumulation_register[31:16]  <= signed'(accumulation_register[31:16])  + {{8{mul8_1_p[7]}}, mul8_1_p}; 
+                                        accumulation_register[15:0]   <= signed'(accumulation_register[15:0])   + mul8_0_p;
+                                        accumulation_register[31:16]  <= signed'(accumulation_register[31:16])  + mul8_1_p; 
                                         accumulation_register[47:32]  <= signed'(accumulation_register[47:32])  + mul16_p[15:0]; 
                                         accumulation_register[63:48]  <= signed'(accumulation_register[63:48])  + mul32_p[15:0]; 
                                     end
